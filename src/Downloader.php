@@ -13,6 +13,7 @@ class Downloader
 
         $streamContext = stream_context_create([
             'ssl' => [
+                'verify_peer' => false,
                 'capture_peer_cert' => true,
             ],
         ]);
