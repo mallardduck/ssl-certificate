@@ -1,13 +1,5 @@
 # A class to validate SSL certificates
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/spatie/ssl-certificate.svg?style=flat-square)](https://packagist.org/packages/spatie/ssl-certificate)
-[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
-[![Build Status](https://img.shields.io/travis/spatie/ssl-certificate/master.svg?style=flat-square)](https://travis-ci.org/spatie/ssl-certificate)
-[![SensioLabsInsight](https://img.shields.io/sensiolabs/i/533fbcef-7363-41af-8d1c-ab53bb6a1d76.svg?style=flat-square)](https://insight.sensiolabs.com/projects/533fbcef-7363-41af-8d1c-ab53bb6a1d76)
-[![Quality Score](https://img.shields.io/scrutinizer/g/spatie/ssl-certificate.svg?style=flat-square)](https://scrutinizer-ci.com/g/spatie/ssl-certificate)
-[![StyleCI](https://styleci.io/repos/64165510/shield)](https://styleci.io/repos/64165510)
-[![Total Downloads](https://img.shields.io/packagist/dt/spatie/ssl-certificate.svg?style=flat-square)](https://packagist.org/packages/spatie/ssl-certificate)
-
 The class provided by this package makes it incredibly easy to query the properties on an ssl certificate. Here's an example:
 
 ```php
@@ -19,16 +11,6 @@ $certificate->expirationDate(); // returns an instance of Carbon
 $certificate->expirationDate()->diffInDays(); // returns an int
 $certificate->getSignatureAlgorithm(); // returns a string
 ```
-
-Spatie is a webdesign agency based in Antwerp, Belgium. You'll find an overview of all our open source projects [on our website](https://spatie.be/opensource).
-
-## Postcardware
-
-You're free to use this package (it's [MIT-licensed](LICENSE.md)), but if it makes it to your production environment you are required to send us a postcard from your hometown, mentioning which of our package(s) you are using.
-
-Our address is: Spatie, Samberstraat 69D, 2060 Antwerp, Belgium.
-
-The best postcards will get published on the open source page on our website.
 
 ## Installation
 
@@ -137,23 +119,14 @@ Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recen
 $ composer test
 ```
 
-## Contributing
-
-Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
-
-## Security
-
-If you discover any security related issues, please email freek@spatie.be instead of using the issue tracker.
+Note: When working to test your implementation of this library you can use [BadSSL](https://badssl.com/) to simulate various SSL scenarios.
 
 ## Credits
 
-- [Freek Van der Herten](https://github.com/freekmurze)
+- [Freek Van der Herten](https://github.com/freekmurze) - Original creator
 - [All Contributors](../../contributors)
 
 The helper functions and tests were copied from the [Laravel Framework](https://github.com/laravel/framework).
-
-## About Spatie
-Spatie is a webdesign agency based in Antwerp, Belgium. You'll find an overview of all our open source projects [on our website](https://spatie.be/opensource).
 
 ## License
 

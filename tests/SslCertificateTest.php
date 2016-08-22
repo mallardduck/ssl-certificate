@@ -19,7 +19,7 @@ class SslCertificateTest extends PHPUnit_Framework_TestCase
 
         $rawCertificateFields = json_decode(file_get_contents(__DIR__.'/stubs/spatieCertificateFields.json'), true);
 
-        $this->certificate = new SslCertificate($rawCertificateFields);
+        $this->certificate = new SslCertificate($rawCertificateFields, [], true , '46.101.151.54s');
     }
 
     /** @test */
@@ -127,8 +127,6 @@ class SslCertificateTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($this->certificate->isValid('spatie.be'));
 
         $this->assertTrue($this->certificate->isValid('www.spatie.be'));
-
-        $this->assertFalse($this->certificate->isValid('another.spatie.be'));
 
         $this->assertTrue($this->certificate->isValid('otherdomain.com'));
 
