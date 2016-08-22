@@ -44,7 +44,9 @@ class Downloader
                     STREAM_CLIENT_CONNECT,
                     $sslConfig->getStream()
                 );
-                return self::prepareResponse($client, $trusted);
+                $domainIp = gethostbyname( $hostName );
+
+                return self::prepareResponse($client, $trusted, $domainIp);
             } catch (Throwable $thrown) {
                 if (str_contains($thrown->getMessage(), 'getaddrinfo failed')) {
                     throw CouldNotDownloadCertificate::hostDoesNotExist($hostName);
@@ -57,16 +59,18 @@ class Downloader
                 throw CouldNotDownloadCertificate::unknownError($hostName, $thrown->getMessage());
             }
         }
+        $domainIp = gethostbyname( $hostName );
 
-        return self::prepareResponse($client, $trusted);
+        return self::prepareResponse($client, $trusted, $domainIp);
     }
 
-    private static function prepareResponse($client, bool $trusted): array
+    private static function prepareResponse($client, bool $trusted, string $domainIp): array
     {
         $results = [
             'cert' => null,
             'full_chain' => [],
-            'trusted' => $trusted
+            'trusted' => $trusted,
+            'resolves-to' => $domainIp
         ];
         $response = stream_context_get_params($client);
         $results['cert'] = openssl_x509_parse($response['options']['ssl']['peer_certificate']);
@@ -77,6 +81,7 @@ class Downloader
                 array_push($results['full_chain'],openssl_x509_parse($cert));
             }
         }
+
         return $results;
     }
 

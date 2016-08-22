@@ -15,6 +15,9 @@ class SslCertificate
     /** @var bool */
     protected $trusted;
 
+    /** @var string */
+    protected $ip;
+
     public static function createForHostName(string $url, int $timeout = 30): SslCertificate
     {
         $downloadResults = Downloader::downloadCertificateFromUrl($url, $timeout);
@@ -22,20 +25,27 @@ class SslCertificate
         $rawCertificateFields = $downloadResults['cert'];
         $rawCertificateChains = $downloadResults['full_chain'];
         $trusted = $downloadResults['trusted'];
+        $ip = $downloadResults['resolves-to'];
 
-        return new static($rawCertificateFields, $rawCertificateChains, $trusted);
+        return new static($rawCertificateFields, $rawCertificateChains, $trusted, $ip);
     }
 
-    public function __construct(array $rawCertificateFields, array $rawCertificateChains, bool $trusted)
+    public function __construct(array $rawCertificateFields, array $rawCertificateChains, bool $trusted, string $ip)
     {
         $this->rawCertificateFields = $rawCertificateFields;
         $this->rawCertificateChains = $rawCertificateChains;
         $this->trusted = $trusted;
+        $this->ip = $ip;
     }
 
     public function getRawCertificateFields(): array
     {
         return $this->rawCertificateFields;
+    }
+
+    public function getResolvedIp(): string
+    {
+        return $this->ip;
     }
 
     public function getIssuer(): string
