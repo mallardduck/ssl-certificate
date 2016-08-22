@@ -3,7 +3,7 @@
 namespace Spatie\SslCertificate;
 
 use Spatie\SslCertificate\Exceptions\CouldNotDownloadCertificate;
-use Spatie\SslCertificate\SslClient;
+use Spatie\SslCertificate\StreamConfig;
 use Throwable;
 
 class Downloader
@@ -13,7 +13,7 @@ class Downloader
     {
         // Trusted variable to keep track of SSL trust
         $trusted = true;
-        $sslConfig = SslConfig::configSecure($timeout);
+        $sslConfig = StreamConfig::configSecure($timeout);
         $parsedUrl = new Url($url);
         $hostName = $parsedUrl->getHostName();
         $port = $parsedUrl->getPort();
@@ -25,13 +25,13 @@ class Downloader
                 $errorDescription,
                 $timeout,
                 STREAM_CLIENT_CONNECT,
-                $sslConfig->getStream()
+                $sslConfig->getContext()
             );
         } catch (Throwable $thrown) {
             // Unset previous vars just to keep things legit
             unset($sslConfig, $client);
             // Try agian in insecure mode
-            $sslConfig = SslConfig::configInsecure($timeout);
+            $sslConfig = StreamConfig::configInsecure($timeout);
 
             try {
                 // As the URL failed varification we set to false
@@ -42,7 +42,7 @@ class Downloader
                     $errorDescription,
                     $timeout,
                     STREAM_CLIENT_CONNECT,
-                    $sslConfig->getStream()
+                    $sslConfig->getContext()
                 );
                 $domainIp = gethostbyname( $hostName );
 

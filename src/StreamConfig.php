@@ -2,7 +2,7 @@
 
 namespace Spatie\SslCertificate;
 
-class SslConfig
+class StreamConfig
 {
 
     /**
@@ -12,7 +12,7 @@ class SslConfig
      */
     protected $streamContext;
 
-    public static function configSecure(): SslConfig
+    public static function configSecure(): StreamConfig
     {
         $streamContext = stream_context_create([
             'ssl' => [
@@ -24,7 +24,7 @@ class SslConfig
         return new static($streamContext);
     }
 
-    public static function configInsecure(): SslConfig
+    public static function configInsecure(): StreamConfig
     {
         $streamContext = stream_context_create([
             'ssl' => [
@@ -39,12 +39,25 @@ class SslConfig
         return new static($streamContext);
     }
 
+    public static function configCrl(): StreamConfig
+    {
+        $streamContext = stream_context_create([
+            'http' => [
+                'method' => "GET",
+                'max_redirects' => '0',
+                'ignore_errors' => '1'
+            ],
+        ]);
+
+        return new static($streamContext);
+    }
+
     public function __construct($streamContext)
     {
         $this->streamContext = $streamContext;
     }
 
-    public function getStream()
+    public function getContext()
     {
         return $this->streamContext;
     }
