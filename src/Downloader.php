@@ -46,7 +46,7 @@ class Downloader
                 );
                 $domainIp = gethostbyname( $hostName );
 
-                return self::prepareResponse($client, $trusted, $domainIp);
+                return self::prepareCertificateResponse($client, $trusted, $domainIp);
             } catch (Throwable $thrown) {
                 if (str_contains($thrown->getMessage(), 'getaddrinfo failed')) {
                     throw CouldNotDownloadCertificate::hostDoesNotExist($hostName);
@@ -61,10 +61,10 @@ class Downloader
         }
         $domainIp = gethostbyname( $hostName );
 
-        return self::prepareResponse($client, $trusted, $domainIp);
+        return self::prepareCertificateResponse($client, $trusted, $domainIp);
     }
 
-    private static function prepareResponse($client, bool $trusted, string $domainIp): array
+    private static function prepareCertificateResponse($client, bool $trusted, string $domainIp): array
     {
         $results = [
             'cert' => null,
@@ -83,6 +83,30 @@ class Downloader
         }
 
         return $results;
+    }
+
+    public static function downloadRevocationListFromUrl(string $url): string
+    {
+        //$rawCrl = shell_exec("curl {$url} | openssl crl -inform DER -outform PEM");
+        $sslConfig = StreamConfig::configCrl();
+        //$stream = file_get_contents($url);
+        //$stream = fopen('/home/dan/public_html/tools/public/crl-2.pem', 'r', $sslConfig$sslConfig);
+        var_dump($stream);
+        $data = openssl_x509_read($stream);
+        dd( $data );
+        // actual data at $url
+        $data = stream_get_contents($stream);
+        dd( $data );
+        var_dump( $data );
+        $hurp = openssl_x509_read($data);
+        dd( $hurp );
+        $herp = openssl_x509_read( $data );
+        dd( $herp );
+        dd( $stream );
+
+        $rawCrl = shell_exec("curl {$url} | openssl crl -inform DER -outform PEM");
+        dd( openssl_x509_read($rawCrl) );
+        return $rawCrl;
     }
 
 }

@@ -3,6 +3,7 @@
 namespace Spatie\SslCertificate;
 
 use Carbon\Carbon;
+use Spatie\SslCertificate\SslRevocationList;
 
 class SslCertificate
 {
@@ -17,6 +18,9 @@ class SslCertificate
 
     /** @var string */
     protected $ip;
+
+    /** @var string */
+    protected $crl;
 
     public static function createForHostName(string $url, int $timeout = 30): SslCertificate
     {
@@ -36,11 +40,32 @@ class SslCertificate
         $this->rawCertificateChains = $rawCertificateChains;
         $this->trusted = $trusted;
         $this->ip = $ip;
+        if (isset($this->rawCertificateFields['extensions']['crlDistributionPoints'])) {
+            $this->crl = new SslRevocationList;
+        }
     }
 
     public function getRawCertificateFields(): array
     {
         return $this->rawCertificateFields;
+    }
+
+    public function getSerialNumber(): string
+    {
+        return dec2HexSerial($this->rawCertificateFields['serialNumber']);
+    }
+
+    public function hasCrlLink(): bool
+    {
+        return isset($this->rawCertificateFields['extensions']['crlDistributionPoints']);
+    }
+
+    public function getCrl()
+    {
+        if (!$this->hasCrlLink()) {
+            return null;
+        }
+        return $this->crl;
     }
 
     public function getResolvedIp(): string
@@ -101,6 +126,10 @@ class SslCertificate
         if (! empty($url)) {
             return $this->appliesToUrl($url ?? $this->getDomain());
         }
+
+        // Check SerialNumber for CRL list
+
+        // Verify SSL is not revoked - OCSP
 
         return true;
     }
