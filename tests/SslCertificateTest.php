@@ -19,7 +19,7 @@ class SslCertificateTest extends PHPUnit_Framework_TestCase
 
         $rawCertificateFields = json_decode(file_get_contents(__DIR__.'/stubs/spatieCertificateFields.json'), true);
 
-        $this->certificate = new SslCertificate($rawCertificateFields, [], true , '46.101.151.54s');
+        $this->certificate = new SslCertificate($rawCertificateFields, [], true , '46.101.151.54', '267977138471675133728493439824231787816484');
     }
 
     /** @test */
