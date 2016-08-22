@@ -13,7 +13,7 @@ class SslCertificate
     protected $rawCertificateChains = [];
 
     /** @var bool */
-    protected $trusted = false;
+    protected $trusted;
 
     public static function createForHostName(string $url, int $timeout = 30): SslCertificate
     {
@@ -26,9 +26,11 @@ class SslCertificate
         return new static($rawCertificateFields, $rawCertificateChains, $trusted);
     }
 
-    public function __construct(array $rawCertificateFields)
+    public function __construct(array $rawCertificateFields, array $rawCertificateChains, bool $trusted)
     {
         $this->rawCertificateFields = $rawCertificateFields;
+        $this->rawCertificateChains = $rawCertificateChains;
+        $this->trusted = $trusted;
     }
 
     public function getRawCertificateFields(): array
@@ -73,6 +75,11 @@ class SslCertificate
     public function isExpired(): bool
     {
         return $this->expirationDate()->isPast();
+    }
+
+    public function isTrusted()
+    {
+        return $this->trusted;
     }
 
     public function isValid(string $url = null)
