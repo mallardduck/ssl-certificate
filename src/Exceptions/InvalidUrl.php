@@ -15,4 +15,9 @@ class InvalidUrl extends Exception
     {
         return new static("Could not determine host from url `{$url}`.");
     }
+
+    public static function couldNotResolveDns(string $hostName): InvalidUrl
+    {
+        return new static("The domain `{$hostName}` does not have a valid DNS record.");
+    }
 }

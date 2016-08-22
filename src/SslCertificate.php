@@ -9,11 +9,21 @@ class SslCertificate
     /** @var array */
     protected $rawCertificateFields = [];
 
+    /** @var array */
+    protected $rawCertificateChains = [];
+
+    /** @var bool */
+    protected $trusted = false;
+
     public static function createForHostName(string $url, int $timeout = 30): SslCertificate
     {
-        $rawCertificateFields = Downloader::downloadCertificateFromUrl($url, $timeout);
+        $downloadResults = Downloader::downloadCertificateFromUrl($url, $timeout);
 
-        return new static($rawCertificateFields);
+        $rawCertificateFields = $downloadResults['cert'];
+        $rawCertificateChains = $downloadResults['full_chain'];
+        $trusted = $downloadResults['trusted'];
+
+        return new static($rawCertificateFields, $rawCertificateChains, $trusted);
     }
 
     public function __construct(array $rawCertificateFields)

@@ -12,6 +12,18 @@ class Url
     /** @var array */
     protected $parsedUrl;
 
+    /** @var int */
+    protected $ipAddress;
+
+    public static function verifyDNS($domain): string
+    {
+        $domainIp = gethostbyname($domain);
+        if (!filter_var($domainIp, FILTER_VALIDATE_IP)) {
+            throw InvalidUrl::couldNotResolveDns($domain);
+        }
+        return $domainIp;
+    }
+
     public function __construct(string $url)
     {
         if (! starts_with($url, ['http://', 'https://'])) {
@@ -29,10 +41,24 @@ class Url
         if (! isset($this->parsedUrl['host'])) {
             throw InvalidUrl::couldNotDetermineHost($this->url);
         }
+
+        $this->ipAddress = $this->verifyDNS($this->parsedUrl['host']);
+
     }
 
     public function getHostName(): string
     {
         return $this->parsedUrl['host'];
     }
+
+    public function getPort(): string
+    {
+        return (isset($this->parsedUrl['port'])) ? $this->parsedUrl['port'] : '443';
+    }
+
+    public function getIp(): string
+    {
+        return $this->ipAddress;
+    }
+
 }
