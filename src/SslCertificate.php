@@ -3,6 +3,7 @@
 namespace Spatie\SslCertificate;
 
 use Carbon\Carbon;
+use phpseclib\Math\BigInteger;
 use Spatie\SslCertificate\SslRevocationList;
 
 class SslCertificate
@@ -19,6 +20,8 @@ class SslCertificate
     /** @var string */
     protected $ip;
 
+    protected $serial;
+
     /** @var string */
     protected $crl;
 
@@ -30,18 +33,20 @@ class SslCertificate
         $rawCertificateChains = $downloadResults['full_chain'];
         $trusted = $downloadResults['trusted'];
         $ip = $downloadResults['resolves-to'];
+        $serial = $downloadResults['cert']['serialNumber'];
 
-        return new static($rawCertificateFields, $rawCertificateChains, $trusted, $ip);
+        return new static($rawCertificateFields, $rawCertificateChains, $trusted, $ip, $serial);
     }
 
-    public function __construct(array $rawCertificateFields, array $rawCertificateChains, bool $trusted, string $ip)
+    public function __construct(array $rawCertificateFields, array $rawCertificateChains, bool $trusted, string $ip, $serial)
     {
         $this->rawCertificateFields = $rawCertificateFields;
         $this->rawCertificateChains = $rawCertificateChains;
         $this->trusted = $trusted;
         $this->ip = $ip;
+        $this->serial = new BigInteger($serial);
         if (isset($this->rawCertificateFields['extensions']['crlDistributionPoints'])) {
-            $this->crl = new SslRevocationList;
+            $this->crl = SslRevocationList::createFromUrl($this->getCrlLink());
         }
     }
 
@@ -60,12 +65,43 @@ class SslCertificate
         return isset($this->rawCertificateFields['extensions']['crlDistributionPoints']);
     }
 
+    private function getCrlField(): string {
+        if (!$this->hasCrlLink()) {
+            return null;
+        }
+        return $this->rawCertificateFields['extensions']['crlDistributionPoints'];
+    }
+
+    public function getCrlLink(): string
+    {
+        if (!$this->hasCrlLink()) {
+            return null;
+        }
+        $rawCrlLink = $this->getCrlField();
+        $link = trim(explode('URI:',$rawCrlLink)[1]);
+        return $link;
+    }
+
     public function getCrl()
     {
         if (!$this->hasCrlLink()) {
             return null;
         }
+
         return $this->crl;
+    }
+
+    public function isClrRevoked()
+    {
+        if (!$this->hasCrlLink()) {
+            return null;
+        }
+        foreach ($this->crl->getRevokedList() as $broke){
+            if ( $this->serial->equals($broke['userCertificate']) ) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public function getResolvedIp(): string

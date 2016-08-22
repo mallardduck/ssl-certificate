@@ -15,6 +15,9 @@ class Url
     /** @var int */
     protected $ipAddress;
 
+    /** @var string */
+    protected $validatedURL;
+
     public static function verifyDNS($domain): string
     {
         $domainIp = gethostbyname($domain);
@@ -43,7 +46,12 @@ class Url
         }
 
         $this->ipAddress = $this->verifyDNS($this->parsedUrl['host']);
+        $this->validatedURL = $url;
+    }
 
+    public function getValidatedURL(): string
+    {
+        return $this->validatedURL;
     }
 
     public function getHostName(): string

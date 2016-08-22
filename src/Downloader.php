@@ -4,6 +4,7 @@ namespace Spatie\SslCertificate;
 
 use Spatie\SslCertificate\Exceptions\CouldNotDownloadCertificate;
 use Spatie\SslCertificate\StreamConfig;
+use phpseclib\File\X509;
 use Throwable;
 
 class Downloader
@@ -85,28 +86,15 @@ class Downloader
         return $results;
     }
 
-    public static function downloadRevocationListFromUrl(string $url): string
+    public static function downloadRevocationListFromUrl(string $url): array
     {
-        //$rawCrl = shell_exec("curl {$url} | openssl crl -inform DER -outform PEM");
-        $sslConfig = StreamConfig::configCrl();
-        //$stream = file_get_contents($url);
-        //$stream = fopen('/home/dan/public_html/tools/public/crl-2.pem', 'r', $sslConfig$sslConfig);
-        var_dump($stream);
-        $data = openssl_x509_read($stream);
-        dd( $data );
-        // actual data at $url
-        $data = stream_get_contents($stream);
-        dd( $data );
-        var_dump( $data );
-        $hurp = openssl_x509_read($data);
-        dd( $hurp );
-        $herp = openssl_x509_read( $data );
-        dd( $herp );
-        dd( $stream );
+        $parsedUrl = new Url($url);
+        $csrConfig = StreamConfig::configCrl();
+        $file = file_get_contents($parsedUrl->getValidatedURL(), false, $csrConfig->getContext());
+        $x509 = new X509();
+        $crl = $x509->loadCRL($file); // see ev2009a.crl
 
-        $rawCrl = shell_exec("curl {$url} | openssl crl -inform DER -outform PEM");
-        dd( openssl_x509_read($rawCrl) );
-        return $rawCrl;
+        return $crl;
     }
 
 }
