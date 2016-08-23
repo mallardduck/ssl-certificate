@@ -8,19 +8,27 @@ use Spatie\SslCertificate\SslRevocationList;
 
 class SslCertificate
 {
-    /** @var array */
-    protected $rawCertificateFields = [];
-
-    /** @var array */
-    protected $rawCertificateChains = [];
-
-    /** @var bool */
-    protected $trusted;
 
     /** @var string */
     protected $ip;
 
+    /** @var BigInteger */
     protected $serial;
+
+    /** @var string */
+    protected $testedDomain;
+
+    /** @var bool */
+    protected $trusted;
+
+    /** @var array */
+    protected $certificateFields = [];
+
+    /** @var array */
+    protected $certificateChains = [];
+
+    /** @var array */
+    protected $connectionMeta = [];
 
     /** @var string */
     protected $crl;
@@ -32,13 +40,7 @@ class SslCertificate
     {
         $downloadResults = Downloader::downloadCertificateFromUrl($url, $timeout);
 
-        $rawCertificateFields = $downloadResults['cert'];
-        $rawCertificateChains = $downloadResults['full_chain'];
-        $trusted = $downloadResults['trusted'];
-        $ip = $downloadResults['resolves-to'];
-        $serial = $downloadResults['cert']['serialNumber'];
-
-        return new static($rawCertificateFields, $rawCertificateChains, $trusted, $ip, $serial);
+        return new static($downloadResults);
     }
 
       private function extractCrlLinks($rawCrlPoints)
@@ -62,32 +64,45 @@ class SslCertificate
       $this->crlLinks = $crlLinks;
     }
 
-    public function __construct(array $rawCertificateFields, array $rawCertificateChains, bool $trusted, string $ip, $serial)
+    public function __construct(array $downloadResults)
     {
-        $this->rawCertificateFields = $rawCertificateFields;
-        $this->rawCertificateChains = $rawCertificateChains;
-        $this->trusted = $trusted;
-        $this->ip = $ip;
-        $this->serial = new BigInteger($serial);
-        if (isset($rawCertificateFields['extensions']['crlDistributionPoints'])) {
-            self::setcrlLinks($rawCertificateFields['extensions']['crlDistributionPoints']);
+        $this->ip = $downloadResults['dns-resolves-to'];
+        $this->serial = new BigInteger($downloadResults['cert']['serialNumber']);
+        $this->testedDomain = $downloadResults['tested'];
+        $this->trusted = $downloadResults['trusted'];
+        $this->certificateFields = $downloadResults['cert'];
+        $this->certificateChains = $downloadResults['full_chain'];
+        $this->connectionMeta = $downloadResults['connection'];
+
+        if (isset($downloadResults['cert']['extensions']['crlDistributionPoints'])) {
+            self::setcrlLinks($downloadResults['cert']['extensions']['crlDistributionPoints']);
             $this->crl = SslRevocationList::createFromUrl($this->getCrlLinks()[0]);
         }
     }
 
-    public function getRawCertificateFields(): array
+    public function getTestedDomain(): string
     {
-        return $this->rawCertificateFields;
+        return $this->testedDomain;
+    }
+
+    public function getCertificateFields(): array
+    {
+        return $this->certificateFields;
+    }
+
+    public function getCertificateChains(): array
+    {
+        return $this->certificateChains;
     }
 
     public function getSerialNumber(): string
     {
-        return dec2HexSerial($this->rawCertificateFields['serialNumber']);
+        return dec2HexSerial($this->certificateFields['serialNumber']);
     }
 
     public function hasCrlLink(): bool
     {
-        return isset($this->rawCertificateFields['extensions']['crlDistributionPoints']);
+        return isset($this->certificateFields['extensions']['crlDistributionPoints']);
     }
 
     public function getCrlLinks(): array
@@ -127,22 +142,22 @@ class SslCertificate
 
     public function getIssuer(): string
     {
-        return $this->rawCertificateFields['issuer']['CN'];
+        return $this->certificateFields['issuer']['CN'];
     }
 
     public function getDomain(): string
     {
-        return $this->rawCertificateFields['subject']['CN'] ?? '';
+        return $this->certificateFields['subject']['CN'] ?? '';
     }
 
     public function getSignatureAlgorithm(): string
     {
-        return $this->rawCertificateFields['signatureTypeSN'] ?? '';
+        return $this->certificateFields['signatureTypeSN'] ?? '';
     }
 
     public function getAdditionalDomains(): array
     {
-        $additionalDomains = explode(', ', $this->rawCertificateFields['extensions']['subjectAltName'] ?? '');
+        $additionalDomains = explode(', ', $this->certificateFields['extensions']['subjectAltName'] ?? '');
 
         return array_map(function (string $domain) {
             return str_replace('DNS:', '', $domain);
@@ -151,12 +166,12 @@ class SslCertificate
 
     public function validFromDate(): Carbon
     {
-        return Carbon::createFromTimestampUTC($this->rawCertificateFields['validFrom_time_t']);
+        return Carbon::createFromTimestampUTC($this->certificateFields['validFrom_time_t']);
     }
 
     public function expirationDate(): Carbon
     {
-        return Carbon::createFromTimestampUTC($this->rawCertificateFields['validTo_time_t']);
+        return Carbon::createFromTimestampUTC($this->certificateFields['validTo_time_t']);
     }
 
     public function isExpired(): bool
@@ -174,7 +189,6 @@ class SslCertificate
         if (! Carbon::now()->between($this->validFromDate(), $this->expirationDate())) {
             return false;
         }
-
         if (! empty($url)) {
             return $this->appliesToUrl($url ?? $this->getDomain());
         }

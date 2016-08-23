@@ -6,19 +6,20 @@ use Spatie\SslCertificate\Exceptions\InvalidUrl;
 
 class Url
 {
+
     /** @var string */
-    protected $url;
+    protected $inputUrl;
 
     /** @var array */
     protected $parsedUrl;
 
-    /** @var int */
-    protected $ipAddress;
-
     /** @var string */
     protected $validatedURL;
 
-    public static function verifyDNS($domain): string
+    /** @var int */
+    protected $ipAddress;
+
+    private static function verifyDNS($domain): string
     {
         $domainIp = gethostbyname($domain);
         if (!filter_var($domainIp, FILTER_VALIDATE_IP)) {
@@ -29,6 +30,7 @@ class Url
 
     public function __construct(string $url)
     {
+        $this->inputUrl = $url;
         if (! starts_with($url, ['http://', 'https://'])) {
             $url = "https://{$url}";
         }
@@ -37,15 +39,13 @@ class Url
             throw InvalidUrl::couldNotValidate($url);
         }
 
-        $this->url = $url;
-
         $this->parsedUrl = parse_url($url);
 
         if (! isset($this->parsedUrl['host'])) {
             throw InvalidUrl::couldNotDetermineHost($this->url);
         }
 
-        $this->ipAddress = $this->verifyDNS($this->parsedUrl['host']);
+        $this->ipAddress = self::verifyDNS($this->parsedUrl['host']);
         $this->validatedURL = $url;
     }
 
@@ -62,6 +62,11 @@ class Url
     public function getPort(): string
     {
         return (isset($this->parsedUrl['port'])) ? $this->parsedUrl['port'] : '443';
+    }
+
+    public function getTestURL(): string
+    {
+        return "{$this->getHostName()}:{$this->getPort()}";
     }
 
     public function getIp(): string
