@@ -61,5 +61,4 @@ class SslRevocationList
     {
         return $this->revokedCertsList;
     }
-
 }

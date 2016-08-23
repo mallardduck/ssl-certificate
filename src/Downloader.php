@@ -52,7 +52,7 @@ class Downloader
                     $sslConfig->getContext()
                 );
                 unset($sslConfig);
-                $domainIp = gethostbyname( $hostName );
+                $domainIp = gethostbyname($hostName);
 
                 return self::prepareCertificateResponse($client, $trusted, $domainIp, $parsedUrl->getTestURL());
             } catch (Throwable $thrown) {
@@ -75,7 +75,7 @@ class Downloader
                 throw CouldNotDownloadCertificate::unknownError($parsedUrl->getTestURL(), $thrown->getMessage());
             }
         }
-        $domainIp = gethostbyname( $hostName );
+        $domainIp = gethostbyname($hostName);
 
         return self::prepareCertificateResponse($client, $trusted, $domainIp, $parsedUrl->getTestURL());
     }
@@ -96,12 +96,11 @@ class Downloader
         $results['cert'] = openssl_x509_parse($response['ssl']['peer_certificate']);
 
         if (count($response["ssl"]["peer_certificate_chain"]) > 1) {
-            foreach($response["ssl"]["peer_certificate_chain"] as $cert)
-            {
+            foreach ($response["ssl"]["peer_certificate_chain"] as $cert) {
                 $parsedCert = openssl_x509_parse($cert);
                 $isChain = ($parsedCert['hash'] !== $results['cert']['hash']);
                 if ($isChain) {
-                    array_push($results['full_chain'],$parsedCert);
+                    array_push($results['full_chain'], $parsedCert);
                 }
             }
         }
@@ -121,5 +120,4 @@ class Downloader
 
         return $crl;
     }
-
 }

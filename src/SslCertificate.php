@@ -43,25 +43,25 @@ class SslCertificate
         return new static($downloadResults);
     }
 
-      private function extractCrlLinks($rawCrlPoints)
-      {
-        $tempCrlItem = explode('URI:',$rawCrlPoints);
+    private function extractCrlLinks($rawCrlPoints)
+    {
+        $tempCrlItem = explode('URI:', $rawCrlPoints);
         $cleanCrlItem = trim($tempCrlItem[1]);
         return $cleanCrlItem;
-      }
+    }
 
     private function setcrlLinks($rawCrlInput)
     {
-      $crlLinks = [];
-      $crlRawItems = explode('Full Name:',$rawCrlInput);
+        $crlLinks = [];
+        $crlRawItems = explode('Full Name:', $rawCrlInput);
       // Remove the stuff before the first 'Full Name:' item
-      array_splice($crlRawItems, 0, 1);
-      foreach ($crlRawItems as $item) {
-        $crlLink = self::extractCrlLinks($item);
-        array_push($crlLinks, $crlLink);
-        unset($crlLink);
-      }
-      $this->crlLinks = $crlLinks;
+        array_splice($crlRawItems, 0, 1);
+        foreach ($crlRawItems as $item) {
+            $crlLink = self::extractCrlLinks($item);
+            array_push($crlLinks, $crlLink);
+            unset($crlLink);
+        }
+        $this->crlLinks = $crlLinks;
     }
 
     public function __construct(array $downloadResults)
@@ -127,8 +127,8 @@ class SslCertificate
         if (!$this->hasCrlLink()) {
             return null;
         }
-        foreach ($this->crl->getRevokedList() as $broke){
-            if ( $this->serial->equals($broke['userCertificate']) ) {
+        foreach ($this->crl->getRevokedList() as $broke) {
+            if ($this->serial->equals($broke['userCertificate'])) {
                 return true;
             }
         }

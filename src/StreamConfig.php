@@ -61,5 +61,4 @@ class StreamConfig
     {
         return $this->streamContext;
     }
-
 }

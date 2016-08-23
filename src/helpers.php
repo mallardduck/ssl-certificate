@@ -91,7 +91,7 @@ function dec2HexSerial(string $serial): string
     $res = "";
     $val = $serial;
 
-    while($counter > 0 && $val > 0) {
+    while ($counter > 0 && $val > 0) {
         $counter = $counter - 1;
         $tmpres = dechex(bcmod($val, $base)) . "";
         /* adjust for 0's */

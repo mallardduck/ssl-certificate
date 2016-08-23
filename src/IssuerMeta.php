@@ -16,7 +16,7 @@ class IssuerMeta
         foreach ($input as $arr) {
             // Get the actual item
             $rawItem = $arr[0];
-            $type = explode('id-at-',$rawItem['type'])[1];
+            $type = explode('id-at-', $rawItem['type'])[1];
             $value = $rawItem['value']['printableString'];
             $items[$type] = $value;
         }
@@ -31,5 +31,4 @@ class IssuerMeta
         $this->organizationName = isset($input['organizationName']) ? $input['organizationName'] : "";
         $this->organizationUnitName = isset($input['organizationalUnitName'])? $input['organizationalUnitName'] : "";
     }
-
 }

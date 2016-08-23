@@ -73,5 +73,4 @@ class Url
     {
         return $this->ipAddress;
     }
-
 }
