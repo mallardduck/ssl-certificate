@@ -23,11 +23,10 @@ class Downloader
         $sslConfig = StreamConfig::configSecure($timeout);
         $parsedUrl = new Url($url);
         $hostName = $parsedUrl->getHostName();
-        $testUrl = "{$parsedUrl->getHostName()}:{$parsedUrl->getPort()}";
 
         try {
             $client = stream_socket_client(
-                "ssl://{$testUrl}",
+                "ssl://{$parsedUrl->getTestURL()}",
                 $errorNumber,
                 $errorDescription,
                 $timeout,
@@ -45,7 +44,7 @@ class Downloader
                 // As the URL failed varification we set to false
                 $trusted = false;
                 $client = stream_socket_client(
-                    "ssl://{$testUrl}",
+                    "ssl://{$parsedUrl->getTestURL()}",
                     $errorNumber,
                     $errorDescription,
                     $timeout,
@@ -55,7 +54,7 @@ class Downloader
                 unset($sslConfig);
                 $domainIp = gethostbyname( $hostName );
 
-                return self::prepareCertificateResponse($client, $trusted, $domainIp, $testUrl);
+                return self::prepareCertificateResponse($client, $trusted, $domainIp, $parsedUrl->getTestURL());
             } catch (Throwable $thrown) {
                 if (str_contains($thrown->getMessage(), 'getaddrinfo failed')) {
                     throw CouldNotDownloadCertificate::hostDoesNotExist($hostName);
@@ -70,21 +69,21 @@ class Downloader
                 }
 
                 if (str_contains($thrown->getMessage(), '(Connection timed out)')) {
-                    throw CouldNotDownloadCertificate::connectionTimeout($testUrl);
+                    throw CouldNotDownloadCertificate::connectionTimeout($parsedUrl->getTestURL());
                 }
 
-                throw CouldNotDownloadCertificate::unknownError($testUrl, $thrown->getMessage());
+                throw CouldNotDownloadCertificate::unknownError($parsedUrl->getTestURL(), $thrown->getMessage());
             }
         }
         $domainIp = gethostbyname( $hostName );
 
-        return self::prepareCertificateResponse($client, $trusted, $domainIp, $testUrl);
+        return self::prepareCertificateResponse($client, $trusted, $domainIp, $parsedUrl->getTestURL());
     }
 
-    private static function prepareCertificateResponse($client, bool $trusted, string $domainIp, string $testUrl): array
+    private static function prepareCertificateResponse($client, bool $trusted, string $domainIp, string $testedUrl): array
     {
         $results = [
-            'tested' => $testUrl,
+            'tested' => $testedUrl,
             'trusted' => $trusted,
             'dns-resolves-to' => $domainIp,
             'cert' => null,
