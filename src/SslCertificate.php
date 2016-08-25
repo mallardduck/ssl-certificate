@@ -9,6 +9,12 @@ use Spatie\SslCertificate\SslRevocationList;
 class SslCertificate
 {
 
+    /** @var bool */
+    protected $trusted;
+
+    /** @var bool */
+    protected $revoked;
+
     /** @var string */
     protected $ip;
 
@@ -17,9 +23,6 @@ class SslCertificate
 
     /** @var string */
     protected $testedDomain;
-
-    /** @var bool */
-    protected $trusted;
 
     /** @var array */
     protected $certificateFields = [];
@@ -35,6 +38,9 @@ class SslCertificate
 
     /** @var string */
     protected $crlLinks = [];
+
+    /** @var bool */
+    protected $revokedTime;
 
     public static function createForHostName(string $url, int $timeout = 30): SslCertificate
     {
@@ -64,6 +70,14 @@ class SslCertificate
         $this->crlLinks = $crlLinks;
     }
 
+    private function getRevokedDate() {
+        foreach ($this->crl->getRevokedList() as $broke) {
+            if ($this->serial->equals($broke['userCertificate'])) {
+                return new Carbon($broke['revocationDate']['utcTime']);
+            }
+        }
+    }
+
     public function __construct(array $downloadResults)
     {
         $this->ip = $downloadResults['dns-resolves-to'];
@@ -77,6 +91,8 @@ class SslCertificate
         if (isset($downloadResults['cert']['extensions']['crlDistributionPoints'])) {
             self::setcrlLinks($downloadResults['cert']['extensions']['crlDistributionPoints']);
             $this->crl = SslRevocationList::createFromUrl($this->getCrlLinks()[0]);
+            $this->revoked = self::isClrRevoked();
+            $this->revokedTime = self::getRevokedDate();
         }
     }
 
@@ -133,6 +149,14 @@ class SslCertificate
             }
         }
         return false;
+    }
+
+    public function getCrlRevokedTime()
+    {
+        if ($this->isClrRevoked()) {
+            return $this->revokedTime;
+        }
+        return null;
     }
 
     public function getResolvedIp(): string
@@ -192,9 +216,10 @@ class SslCertificate
         if (! empty($url)) {
             return $this->appliesToUrl($url ?? $this->getDomain());
         }
-
         // Check SerialNumber for CRL list
-
+        if ($this->isClrRevoked()) {
+            return false;
+        }
         // Verify SSL is not revoked - OCSP
 
         return true;
