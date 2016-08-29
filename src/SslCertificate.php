@@ -197,6 +197,11 @@ class SslCertificate
         }, $additionalDomains);
     }
 
+    public function getConnectionMeta(): array
+    {
+        return $this->connectionMeta;
+    }
+
     public function validFromDate(): Carbon
     {
         return Carbon::createFromTimestampUTC($this->certificateFields['validFrom_time_t']);
