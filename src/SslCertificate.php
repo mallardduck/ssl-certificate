@@ -96,6 +96,14 @@ class SslCertificate
         }
     }
 
+    public function hasSslChain(): bool
+    {
+        if ( isset($this->certificateChains) && count($this->certificateChains) >= 1 ) {
+            return true;
+        }
+        return false;
+    }
+
     public function getTestedDomain(): string
     {
         return $this->testedDomain;
@@ -145,6 +153,7 @@ class SslCertificate
         }
         foreach ($this->crl->getRevokedList() as $broke) {
             if ($this->serial->equals($broke['userCertificate'])) {
+                $this->trusted = false;
                 return true;
             }
         }
@@ -220,7 +229,6 @@ class SslCertificate
         if ($this->isClrRevoked()) {
             return false;
         }
-        // Verify SSL is not revoked - OCSP
 
         return true;
     }
