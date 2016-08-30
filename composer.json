@@ -17,6 +17,7 @@
     ],
     "require": {
         "php": "^7.0",
+        "ext-openssl": "*",
         "nesbot/carbon": "^1.21",
         "phpseclib/phpseclib": "^2.0"
     },
