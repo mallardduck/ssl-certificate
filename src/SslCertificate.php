@@ -130,7 +130,7 @@ class SslCertificate
 
     public function getSerialNumber(): string
     {
-        return dec2HexSerial($this->certificateFields['serialNumber']);
+        return strtoupper($this->serial->toHex());
     }
 
     public function hasCrlLink(): bool

@@ -103,9 +103,9 @@ class SslChain
         return $this->issuer['CN'] ?? '';
     }
 
-    public function getSerialNumber(): BigInteger
+    public function getSerialNumber(): string
     {
-        return $this->serial;
+        return strtoupper($this->serial->toHex());
     }
 
     public function validFromDate(): Carbon

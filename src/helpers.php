@@ -76,33 +76,3 @@ function str_contains(string $haystack, $needles): bool
 
     return false;
 }
-
-/**
- * Convert SSL serial from decimal to hex.
- *
- * @param string       $serial
- *
- * @return string
- */
-function dec2HexSerial(string $serial): string
-{
-    $base = bcpow('2', '32');
-    $counter = 100;
-    $res = "";
-    $val = $serial;
-
-    while ($counter > 0 && $val > 0) {
-        $counter = $counter - 1;
-        $tmpres = dechex(bcmod($val, $base)) . "";
-        /* adjust for 0's */
-        for ($i = 8-strlen($tmpres); $i > 0; $i = $i-1) {
-            $tmpres = "0$tmpres";
-        }
-        $res = $tmpres .$res;
-        $val = bcdiv($val, $base);
-    }
-    if ($counter <= 0) {
-        return false;
-    }
-    return strtoupper($res);
-}
