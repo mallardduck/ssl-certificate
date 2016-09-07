@@ -4,6 +4,7 @@ namespace Spatie\SslCertificate;
 
 use Carbon\Carbon;
 use phpseclib\Math\BigInteger;
+use Spatie\SslCertificate\SslChain;
 use Spatie\SslCertificate\SslRevocationList;
 
 class SslCertificate
@@ -78,6 +79,14 @@ class SslCertificate
         }
     }
 
+    private function parseCertChains(array $chains) {
+        $output = [];
+        foreach ($chains as $cert) {
+            array_push($output, new SslChain($cert));
+        }
+        return $output;
+    }
+
     public function __construct(array $downloadResults)
     {
         $this->ip = $downloadResults['dns-resolves-to'];
@@ -85,7 +94,7 @@ class SslCertificate
         $this->testedDomain = $downloadResults['tested'];
         $this->trusted = $downloadResults['trusted'];
         $this->certificateFields = $downloadResults['cert'];
-        $this->certificateChains = $downloadResults['full_chain'];
+        $this->certificateChains = self::parseCertChains($downloadResults['full_chain']);
         $this->connectionMeta = $downloadResults['connection'];
 
         if (isset($downloadResults['cert']['extensions']['crlDistributionPoints'])) {
