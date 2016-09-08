@@ -233,9 +233,11 @@ class SslCertificate
 
     public function isValid(string $url = null)
     {
+        // Verify SSL not expired
         if (! Carbon::now()->between($this->validFromDate(), $this->expirationDate())) {
             return false;
         }
+        // If a URL is provided verify the SSL applies to the domain
         if (! empty($url)) {
             return $this->appliesToUrl($url ?? $this->getDomain());
         }
