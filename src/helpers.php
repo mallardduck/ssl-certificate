@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\SslCertificate;
+namespace LiquidWeb\SslCertificate;
 
 function starts_with($haystack, $needles): bool
 {

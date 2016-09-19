@@ -1,9 +1,9 @@
 <?php
 
-namespace Spatie\SslCertificate\Exceptions;
+namespace LiquidWeb\SslCertificate\Exceptions;
 
 use Exception;
-use Spatie\SslCertificate\Url;
+use LiquidWeb\SslCertificate\Url;
 
 class CouldNotDownloadCertificate extends Exception
 {

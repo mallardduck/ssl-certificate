@@ -1,10 +1,10 @@
 <?php
 
-namespace Spatie\SslCertificate\Test;
+namespace LiquidWeb\SslCertificate\Test;
 
 use Carbon\Carbon;
 use PHPUnit_Framework_TestCase;
-use Spatie\SslCertificate\SslCertificate;
+use LiquidWeb\SslCertificate\SslCertificate;
 
 class SslCertificateTest extends PHPUnit_Framework_TestCase
 {

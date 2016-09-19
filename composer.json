@@ -1,17 +1,18 @@
 {
-    "name": "spatie/ssl-certificate",
-    "description": "A class to easily query the properties of an ssl certificate ",
+    "name": "liquidweb/ssl-certificate",
+    "description": "A class to easily query the properties of and validate the status of an ssl certificate ",
     "keywords": [
-        "spatie",
-        "ssl-certificate"
+        "ssl",
+        "ssl-certificate",
+        "security"
     ],
-    "homepage": "https://github.com/spatie/ssl-certificate",
+    "homepage": "https://github.com/mallardduck/ssl-certificate",
     "license": "MIT",
     "authors": [
         {
-            "name": "Freek Van der Herten",
-            "email": "freek@spatie.be",
-            "homepage": "https://spatie.be",
+            "name": "Dan Pock",
+            "email": "dpock@liquidweb.com",
+            "homepage": "https://liquidweb.com",
             "role": "Developer"
         }
     ],
@@ -26,7 +27,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Spatie\\SslCertificate\\": "src"
+            "LiquidWeb\\SslCertificate\\": "src"
         },
         "files": [
             "src/helpers.php"
@@ -34,7 +35,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Spatie\\SslCertificate\\Test\\": "tests"
+            "LiquidWeb\\SslCertificate\\Test\\": "tests"
         }
     },
     "scripts": {

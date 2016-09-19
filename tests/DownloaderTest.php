@@ -1,11 +1,11 @@
 <?php
 
-namespace Spatie\SslCertificate\Test;
+namespace LiquidWeb\SslCertificate\Test;
 
 use PHPUnit_Framework_TestCase;
-use Spatie\SslCertificate\Downloader;
-use Spatie\SslCertificate\Exceptions\InvalidUrl;
-use Spatie\SslCertificate\Exceptions\CouldNotDownloadCertificate;
+use LiquidWeb\SslCertificate\Downloader;
+use LiquidWeb\SslCertificate\Exceptions\InvalidUrl;
+use LiquidWeb\SslCertificate\Exceptions\CouldNotDownloadCertificate;
 
 class DownloaderTest extends PHPUnit_Framework_TestCase
 {

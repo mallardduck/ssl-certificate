@@ -1,9 +1,9 @@
 <?php
 
-namespace Spatie\SslCertificate;
+namespace LiquidWeb\SslCertificate;
 
 use Carbon\Carbon;
-use Spatie\SslCertificate\IssuerMeta;
+use LiquidWeb\SslCertificate\IssuerMeta;
 
 class SslRevocationList
 {

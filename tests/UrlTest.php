@@ -1,10 +1,10 @@
 <?php
 
-namespace Spatie\SslCertificate\Test;
+namespace LiquidWeb\SslCertificate\Test;
 
 use PHPUnit_Framework_TestCase;
-use Spatie\SslCertificate\Exceptions\InvalidUrl;
-use Spatie\SslCertificate\Url;
+use LiquidWeb\SslCertificate\Exceptions\InvalidUrl;
+use LiquidWeb\SslCertificate\Url;
 
 class UrlTest extends PHPUnit_Framework_TestCase
 {

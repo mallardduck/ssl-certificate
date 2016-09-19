@@ -1,11 +1,11 @@
 <?php
 
-namespace Spatie\SslCertificate;
+namespace LiquidWeb\SslCertificate;
 
 use Carbon\Carbon;
 use phpseclib\Math\BigInteger;
-use Spatie\SslCertificate\SslChain;
-use Spatie\SslCertificate\SslRevocationList;
+use LiquidWeb\SslCertificate\SslChain;
+use LiquidWeb\SslCertificate\SslRevocationList;
 
 class SslCertificate
 {

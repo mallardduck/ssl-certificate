@@ -1,8 +1,8 @@
 <?php
 
-namespace Spatie\SslCertificate;
+namespace LiquidWeb\SslCertificate;
 
-use Spatie\SslCertificate\Exceptions\InvalidUrl;
+use LiquidWeb\SslCertificate\Exceptions\InvalidUrl;
 
 class Url
 {

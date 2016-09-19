@@ -1,9 +1,9 @@
 <?php
 
-namespace Spatie\SslCertificate;
+namespace LiquidWeb\SslCertificate;
 
-use Spatie\SslCertificate\Exceptions\CouldNotDownloadCertificate;
-use Spatie\SslCertificate\StreamConfig;
+use LiquidWeb\SslCertificate\Exceptions\CouldNotDownloadCertificate;
+use LiquidWeb\SslCertificate\StreamConfig;
 use phpseclib\File\X509;
 use Throwable;
 

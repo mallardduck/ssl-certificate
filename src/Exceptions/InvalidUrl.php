@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\SslCertificate\Exceptions;
+namespace LiquidWeb\SslCertificate\Exceptions;
 
 use Exception;
 
