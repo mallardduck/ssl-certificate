@@ -25,6 +25,9 @@ class SslCertificate
     /** @var string */
     protected $crl;
 
+    /** @var string */
+    protected $crlLinks = [];
+
     public static function createForHostName(string $url, int $timeout = 30): SslCertificate
     {
         $downloadResults = Downloader::downloadCertificateFromUrl($url, $timeout);
@@ -38,6 +41,27 @@ class SslCertificate
         return new static($rawCertificateFields, $rawCertificateChains, $trusted, $ip, $serial);
     }
 
+      private function extractCrlLinks($rawCrlPoints)
+      {
+        $tempCrlItem = explode('URI:',$rawCrlPoints);
+        $cleanCrlItem = trim($tempCrlItem[1]);
+        return $cleanCrlItem;
+      }
+
+    private function setcrlLinks($rawCrlInput)
+    {
+      $crlLinks = [];
+      $crlRawItems = explode('Full Name:',$rawCrlInput);
+      // Remove the stuff before the first 'Full Name:' item
+      array_splice($crlRawItems, 0, 1);
+      foreach ($crlRawItems as $item) {
+        $crlLink = self::extractCrlLinks($item);
+        array_push($crlLinks, $crlLink);
+        unset($crlLink);
+      }
+      $this->crlLinks = $crlLinks;
+    }
+
     public function __construct(array $rawCertificateFields, array $rawCertificateChains, bool $trusted, string $ip, $serial)
     {
         $this->rawCertificateFields = $rawCertificateFields;
@@ -45,8 +69,9 @@ class SslCertificate
         $this->trusted = $trusted;
         $this->ip = $ip;
         $this->serial = new BigInteger($serial);
-        if (isset($this->rawCertificateFields['extensions']['crlDistributionPoints'])) {
-            $this->crl = SslRevocationList::createFromUrl($this->getCrlLink());
+        if (isset($rawCertificateFields['extensions']['crlDistributionPoints'])) {
+            self::setcrlLinks($rawCertificateFields['extensions']['crlDistributionPoints']);
+            $this->crl = SslRevocationList::createFromUrl($this->getCrlLinks()[0]);
         }
     }
 
@@ -65,21 +90,12 @@ class SslCertificate
         return isset($this->rawCertificateFields['extensions']['crlDistributionPoints']);
     }
 
-    private function getCrlField(): string {
-        if (!$this->hasCrlLink()) {
-            return null;
-        }
-        return $this->rawCertificateFields['extensions']['crlDistributionPoints'];
-    }
-
-    public function getCrlLink(): string
+    public function getCrlLinks(): array
     {
         if (!$this->hasCrlLink()) {
             return null;
         }
-        $rawCrlLink = $this->getCrlField();
-        $link = trim(explode('URI:',$rawCrlLink)[1]);
-        return $link;
+        return $this->crlLinks;
     }
 
     public function getCrl()
