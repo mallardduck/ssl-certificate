@@ -17,9 +17,9 @@ class SslCertificateTest extends PHPUnit_Framework_TestCase
 
         Carbon::setTestNow(Carbon::create('2016', '06', '01', '00', '00', '00', 'utc'));
 
-        $rawCertificateFields = json_decode(file_get_contents(__DIR__.'/stubs/spatieCertificateFields.json'), true);
+        $rawDownloaderFields = json_decode(file_get_contents(__DIR__.'/stubs/spatieCertificateFields.json'), true);
 
-        $this->certificate = new SslCertificate($rawCertificateFields, [], true , '46.101.151.54', '267977138471675133728493439824231787816484');
+        $this->certificate = new SslCertificate($rawDownloaderFields);
     }
 
     /** @test */
