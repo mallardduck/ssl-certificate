@@ -95,6 +95,11 @@ class SslChain
 
     public function getIssuerOrganizationUnitName(): string
     {
+        if (isset($this->issuer['OU'])) {
+            if (is_array($this->issuer['OU'])) {
+                return $this->issuer['OU'][0] ?? '';
+            }
+        }
         return $this->issuer['OU'] ?? '';
     }
 
@@ -145,5 +150,4 @@ class SslChain
 
         return $this->isValid($url);
     }
-
 }
