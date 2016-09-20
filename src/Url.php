@@ -42,7 +42,7 @@ class Url
         $this->parsedUrl = parse_url($url);
 
         if (! isset($this->parsedUrl['host'])) {
-            throw InvalidUrl::couldNotDetermineHost($this->url);
+            throw InvalidUrl::couldNotDetermineHost($url);
         }
 
         $this->ipAddress = self::verifyDNS($this->parsedUrl['host']);

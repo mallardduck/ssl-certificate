@@ -29,6 +29,60 @@ class SslCertificateTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
+    public function it_can_determine_ssl_serial()
+    {
+        $this->assertSame('031383978A14D54B9724863B3D758AE66624', $this->certificate->getSerialNumber());
+    }
+
+    /** @test */
+    public function it_can_determine_domain_ip()
+    {
+        $this->assertSame('46.101.151.54', $this->certificate->getResolvedIp());
+    }
+
+    /** @test */
+    public function it_can_determine_valid_status()
+    {
+        $this->assertSame(true, $this->certificate->isValid());
+    }
+
+    /** @test */
+    public function it_can_determine_trust_status()
+    {
+        $this->assertSame(true, $this->certificate->isTrusted());
+    }
+
+    /** @test */
+    public function it_can_determine_if_has_ssl_chain()
+    {
+        $this->assertSame(true, $this->certificate->hasSslChain());
+    }
+
+    /** @test */
+    public function it_can_determine_the_tested_domain()
+    {
+        $this->assertSame("spatie.be:443", $this->certificate->getTestedDomain());
+    }
+
+    /** @test */
+    public function it_can_determine_crl_status()
+    {
+        $this->assertSame(null, $this->certificate->isClrRevoked());
+    }
+
+    /** @test */
+    public function it_can_get_the_raw_fields()
+    {
+        $this->assertInternalType("array", $this->certificate->getCertificateFields());
+    }
+
+    /** @test */
+    public function it_can_get_the_chains()
+    {
+        $this->assertInternalType("array", $this->certificate->getCertificateChains());
+    }
+
+    /** @test */
     public function it_can_determine_the_domain()
     {
         $this->assertSame('spatie.be', $this->certificate->getDomain());
@@ -144,4 +198,25 @@ class SslCertificateTest extends PHPUnit_Framework_TestCase
 
         $this->assertSame('spatie.be', $downloadedCertificate->getDomain());
     }
+
+    /** @test */
+    public function it_can_check_a_revoked_ssl()
+    {
+        $rawRevokedFields = json_decode(file_get_contents(__DIR__.'/stubs/revokedCertificateFields.json'), true);
+        $revokedSslCert = new SslCertificate($rawRevokedFields);
+
+        $this->assertSame(true, $revokedSslCert->isClrRevoked());
+        $this->assertSame(false, $revokedSslCert->isValid());
+        $this->assertInternalType('object', $revokedSslCert->getCrlRevokedTime());
+    }
+
+    /** @test */
+    public function it_can_check_a_ssl_missing_chains()
+    {
+        $rawRevokedFields = json_decode(file_get_contents(__DIR__.'/stubs/incompleteCertificateFields.json'), true);
+        $incompleteSslCert = new SslCertificate($rawRevokedFields);
+
+        $this->assertSame(false, $incompleteSslCert->hasSslChain());
+    }
+
 }
