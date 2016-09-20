@@ -28,33 +28,11 @@ $certificate->getSerialNumber(); // returns a string
 
 ## Installation
 
-<!--
 You can install the package via composer:
 
 ```bash
 composer require liquidweb/ssl-certificate
 ```
--->
-Currently the package is available by manually editing a projects composer.json file to include the repository location for this git and the requirement line to define the version.
-
-You would add the following:
-
-```
-"repositories": [
-    {
-        "type": "vcs",
-        "url": "https://gitlab.lucidinternets.com/LiquidWeb/ssl-certificate.git"
-    }
-]
-```
-
-And in the require section:
-```
-"liquidweb/ssl-certificate": "dev-master"
-
-```
-
-This should get the package installed for the time-being, though soon it will be available on packagist.
 
 ## Usage
 
