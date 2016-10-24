@@ -12,7 +12,7 @@ class DownloaderTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function it_can_download_a_certificate_from_a_host_name()
     {
-        $downloadResults = Downloader::downloadCertificateFromUrl('spatie.be');
+        $downloadResults = Downloader::downloadCertificateFromUrl('spatie.be', 10);
 
         $this->assertTrue(is_array($downloadResults));
         $this->assertTrue(is_array($downloadResults['cert']));
@@ -41,7 +41,7 @@ class DownloaderTest extends PHPUnit_Framework_TestCase
     {
         $this->expectException(CouldNotDownloadCertificate::class);
 
-        Downloader::downloadCertificateFromUrl('rc4.badssl.com');
+        Downloader::downloadCertificateFromUrl('rc4.badssl.com', 10);
     }
 
     /** @test */
