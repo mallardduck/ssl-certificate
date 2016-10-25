@@ -8,6 +8,9 @@ apt-get install git libcurl4-gnutls-dev libicu-dev libmcrypt-dev libvpx-dev libj
 pecl install xdebug
 echo "zend_extension=/usr/local/lib/php/extensions/no-debug-non-zts-20151012/xdebug.so" > /usr/local/etc/php/conf.d/xdebug.ini
 
+# Set memory limit
+echo "memory_limit=512M" > /usr/local/etc/php/conf.d/composer-docker-memory-limit.ini
+
 # Compile PHP, include these extensions.
 docker-php-ext-install mbstring mcrypt pdo_mysql curl json intl gd xml zip bz2 opcache
 
