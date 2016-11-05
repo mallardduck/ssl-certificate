@@ -36,13 +36,13 @@ class Url
         }
 
         if (! filter_var($url, FILTER_VALIDATE_URL)) {
-            throw InvalidUrl::couldNotValidate($url);
+            throw InvalidUrl::couldNotValidate($this->inputUrl);
         }
 
         $this->parsedUrl = parse_url($url);
 
         if (! isset($this->parsedUrl['host'])) {
-            throw InvalidUrl::couldNotDetermineHost($url);
+            throw InvalidUrl::couldNotDetermineHost($this->inputUrl);
         }
 
         $this->ipAddress = self::verifyDNS($this->parsedUrl['host']);

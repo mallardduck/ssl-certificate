@@ -9,6 +9,7 @@ use LiquidWeb\SslCertificate\Exceptions\CouldNotDownloadCertificate;
 
 class DownloaderTest extends PHPUnit_Framework_TestCase
 {
+
     /** @test */
     public function it_can_download_a_certificate_from_a_host_name()
     {
@@ -18,6 +19,31 @@ class DownloaderTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(is_array($downloadResults['cert']));
 
         $this->assertSame('/CN=spatie.be', $downloadResults['cert']['name']);
+    }
+
+    /** @test */
+    public function it_can_track_ssl_trusted_status_correctly()
+    {
+        $downloadResults = Downloader::downloadCertificateFromUrl('selfsigned.badssl.com', 10);
+
+        $this->assertTrue(is_array($downloadResults));
+        $this->assertTrue(is_array($downloadResults['cert']));
+        $this->assertFalse($downloadResults['trusted']);
+
+        $this->assertSame('/C=US/ST=California/L=San Francisco/O=BadSSL Fallback. Unknown subdomain or no SNI./CN=badssl-fallback-unknown-subdomain-or-no-sni', $downloadResults['cert']['name']);
+    }
+
+
+    /** @test */
+    public function it_can_throw_ssl_errors_correctly()
+    {
+        $this->expectException(CouldNotDownloadCertificate::class);
+        $this->expectExceptionMessage('Server SSL handshake error – the certificate for `rc4.badssl.com:443` will not work.');
+        Downloader::downloadCertificateFromUrl('rc4.badssl.com', 10);
+
+        $this->expectException(CouldNotDownloadCertificate::class);
+        $this->expectExceptionMessage('Server does not support SSL over port 80.');
+        Downloader::downloadCertificateFromUrl('selfsigned.badssl.com:80', 10);
     }
 
     /** @test */

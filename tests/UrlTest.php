@@ -31,4 +31,12 @@ class UrlTest extends PHPUnit_Framework_TestCase
 
         new Url('');
     }
+
+    /** @test */
+    public function it_can_determine_a_host_ip()
+    {
+        $url = new Url('https://spatie.be/opensource');
+
+        $this->assertSame('46.101.151.54', $url->getIp());
+    }
 }

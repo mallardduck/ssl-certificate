@@ -41,7 +41,7 @@ class Downloader
             $sslConfig = StreamConfig::configInsecure($timeout);
 
             try {
-                // As the URL failed varification we set to false
+                // As the URL failed verification we set to false
                 $trusted = false;
                 $client = stream_socket_client(
                     "ssl://{$parsedUrl->getTestURL()}",
@@ -98,10 +98,10 @@ class Downloader
         if (count($response["ssl"]["peer_certificate_chain"]) > 1) {
             foreach ($response["ssl"]["peer_certificate_chain"] as $cert) {
                 $parsedCert = openssl_x509_parse($cert);
-                $isChain = ($parsedCert['hash'] !== $results['cert']['hash']);
-                if ($isChain) {
-                    array_push($results['full_chain'], $parsedCert);
+                if ($parsedCert['hash'] === $results['cert']['hash']) {
+                    continue;
                 }
+                array_push($results['full_chain'], $parsedCert);
             }
         }
 

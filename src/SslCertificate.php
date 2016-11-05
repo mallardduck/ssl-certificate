@@ -61,7 +61,7 @@ class SslCertificate
     {
         $crlLinks = [];
         $crlRawItems = explode('Full Name:', $rawCrlInput);
-      // Remove the stuff before the first 'Full Name:' item
+        // Remove the stuff before the first 'Full Name:' item
         array_splice($crlRawItems, 0, 1);
         foreach ($crlRawItems as $item) {
             $crlLink = self::extractCrlLinks($item);
@@ -71,7 +71,8 @@ class SslCertificate
         $this->crlLinks = $crlLinks;
     }
 
-    private function getRevokedDate() {
+    private function getRevokedDate()
+    {
         foreach ($this->crl->getRevokedList() as $broke) {
             if ($this->serial->equals($broke['userCertificate'])) {
                 return new Carbon($broke['revocationDate']['utcTime']);
@@ -79,7 +80,8 @@ class SslCertificate
         }
     }
 
-    private function parseCertChains(array $chains) {
+    private function parseCertChains(array $chains)
+    {
         $output = [];
         foreach ($chains as $cert) {
             array_push($output, new SslChain($cert));
@@ -107,7 +109,7 @@ class SslCertificate
 
     public function hasSslChain(): bool
     {
-        if ( isset($this->certificateChains) && count($this->certificateChains) >= 1 ) {
+        if (isset($this->certificateChains) && count($this->certificateChains) >= 1) {
             return true;
         }
         return false;
@@ -201,9 +203,12 @@ class SslCertificate
     {
         $additionalDomains = explode(', ', $this->certificateFields['extensions']['subjectAltName'] ?? '');
 
-        return array_map(function (string $domain) {
-            return str_replace('DNS:', '', $domain);
-        }, $additionalDomains);
+        return array_map(
+            function (string $domain) {
+                return str_replace('DNS:', '', $domain);
+            },
+            $additionalDomains
+        );
     }
 
     public function getConnectionMeta(): array
