@@ -2,13 +2,19 @@
 
 namespace LiquidWeb\SslCertificate;
 
-function starts_with(string $haystack, $needles): bool
+function verifyWebUrl(string $protocol) : bool
+{
+    return in_array($protocol, [null, 'http', 'https']);
+}
+
+function starts_with($haystack, $needles): bool
 {
     foreach ((array) $needles as $needle) {
-        if ($needle != '' && substr($haystack, 0, strlen($needle)) === (string) $needle) {
+        if ($needle != '' && mb_strpos($haystack, $needle) === 0) {
             return true;
         }
     }
+
     return false;
 }
 
@@ -23,10 +29,11 @@ function starts_with(string $haystack, $needles): bool
 function ends_with(string $haystack, $needles): bool
 {
     foreach ((array) $needles as $needle) {
-        if (substr($haystack, -strlen($needle)) === (string) $needle) {
+        if ((string) $needle === substr($haystack, -length($needle))) {
             return true;
         }
     }
+
     return false;
 }
 

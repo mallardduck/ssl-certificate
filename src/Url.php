@@ -2,11 +2,11 @@
 
 namespace LiquidWeb\SslCertificate;
 
+use League\Uri\UriParser;
 use LiquidWeb\SslCertificate\Exceptions\InvalidUrl;
 
 class Url
 {
-
     /** @var string */
     protected $inputUrl;
 
@@ -19,7 +19,7 @@ class Url
     /** @var int */
     protected $ipAddress;
 
-    private static function verifyDNS($domain): string
+    private static function verifyAndGetDNS($domain): string
     {
         $domainIp = gethostbyname($domain);
         if (!filter_var($domainIp, FILTER_VALIDATE_IP)) {
@@ -28,35 +28,57 @@ class Url
         return $domainIp;
     }
 
+    private static function isValidFqdn($domain): bool
+    {
+        if (!filter_var($domain, FILTER_VALIDATE_DOMAIN)) {
+            return false;
+        }
+        return true;
+    }
+
+    private static function isValidUrl($domain): bool
+    {
+        if (!filter_var($domain, FILTER_VALIDATE_URL)) {
+            return false;
+        }
+        return true;
+    }
+
     public function __construct(string $url)
     {
         $this->inputUrl = $url;
-        if (! starts_with($url, ['http://', 'https://'])) {
-            $url = "https://{$url}";
+        $parser = new UriParser();
+        $this->parsedUrl = $parser->parse($this->inputUrl);
+
+        // Verify parsing has a host
+        if (is_null($this->parsedUrl['host'])) {
+            $this->parsedUrl = $parser->parse('https://'.$this->inputUrl);
+            if (is_null($this->parsedUrl['host'])) {
+                throw InvalidUrl::couldNotDetermineHost($url);
+            }
         }
 
-        if (! filter_var($url, FILTER_VALIDATE_URL)) {
-            throw InvalidUrl::couldNotValidate($this->inputUrl);
+        if (! filter_var((string) $this->getValidUrl(), FILTER_VALIDATE_URL)) {
+            throw InvalidUrl::couldNotValidate($url);
         }
 
-        $this->parsedUrl = parse_url($url);
-
-        if (! isset($this->parsedUrl['host'])) {
-            throw InvalidUrl::couldNotDetermineHost($this->inputUrl);
-        }
-
-        $this->ipAddress = self::verifyDNS($this->parsedUrl['host']);
+        $this->ipAddress = self::verifyAndGetDNS($this->parsedUrl['host']);
         $this->validatedURL = $url;
     }
 
-    public function getValidatedURL(): string
+    public function getIp(): string
     {
-        return $this->validatedURL;
+        return $this->ipAddress;
     }
 
     public function getHostName(): string
     {
         return $this->parsedUrl['host'];
+    }
+
+    public function getValidatedURL(): string
+    {
+        return $this->validatedURL;
     }
 
     public function getPort(): string
@@ -69,8 +91,11 @@ class Url
         return "{$this->getHostName()}:{$this->getPort()}";
     }
 
-    public function getIp(): string
+    public function getValidUrl(): string
     {
-        return $this->ipAddress;
+        if ($this->getPort() === '80') {
+            return 'http://'.$this->getHostName().'/';
+        }
+        return 'https://'.$this->getHostName().'/';
     }
 }

@@ -52,9 +52,8 @@ class Downloader
                     $sslConfig->getContext()
                 );
                 unset($sslConfig);
-                $domainIp = gethostbyname($hostName);
 
-                return self::prepareCertificateResponse($client, $trusted, $domainIp, $parsedUrl->getTestURL());
+                return self::prepareCertificateResponse($client, $trusted, $parsedUrl->getIp(), $parsedUrl->getTestURL());
             } catch (Throwable $thrown) {
                 if (str_contains($thrown->getMessage(), 'getaddrinfo failed')) {
                     throw CouldNotDownloadCertificate::hostDoesNotExist($hostName);
@@ -75,9 +74,8 @@ class Downloader
                 throw CouldNotDownloadCertificate::unknownError($parsedUrl->getTestURL(), $thrown->getMessage());
             }
         }
-        $domainIp = gethostbyname($hostName);
 
-        return self::prepareCertificateResponse($client, $trusted, $domainIp, $parsedUrl->getTestURL());
+        return self::prepareCertificateResponse($client, $trusted, $parsedUrl->getIp(), $parsedUrl->getTestURL());
     }
 
     private static function prepareCertificateResponse($client, bool $trusted, string $domainIp, string $testedUrl): array
@@ -98,10 +96,10 @@ class Downloader
         if (count($response["ssl"]["peer_certificate_chain"]) > 1) {
             foreach ($response["ssl"]["peer_certificate_chain"] as $cert) {
                 $parsedCert = openssl_x509_parse($cert);
-                if ($parsedCert['hash'] === $results['cert']['hash']) {
-                    continue;
+                $isChain = ($parsedCert['hash'] !== $results['cert']['hash']);
+                if ($isChain) {
+                    array_push($results['full_chain'], $parsedCert);
                 }
-                array_push($results['full_chain'], $parsedCert);
             }
         }
 
@@ -117,7 +115,6 @@ class Downloader
         $x509 = new X509();
         $crl = $x509->loadCRL($file); // see ev2009a.crl
         unset($x509, $file);
-
         return $crl;
     }
 }
