@@ -2,6 +2,47 @@
 
 All notable changes to `ssl-certificate` will be documented in this file
 
+## 1.1.2 - 2016-12-12
+
+- Update CHANGELOG.md file
+- Add etsy/phan support
+- Add PHPStan as require-dev
+- Better PHPDocs and Coding standards all over
+- Updated tests to match code changes
+- Refactor SslCertificate revoked status related code
+
+## 1.1.1 - Never Released
+
+- Update README.md file
+- Improve logic, reduce assumptions
+- Add more return types; also add commented ones for PHP 7.1
+
+## 1.1.0 - Never Released
+
+- Refactor Url class; use league parser
+- Does contain non-breaking API changes
+    - verifyDNS => verifyAndGetDNS
+    - Added: getValidatedURL
+- Basic code style fixes
+
+## 1.0.3 - Never Released
+
+- Update composer test command shortcut
+- Adjust some logic for SSL chains
+- Update helper functions
+- Update tests for Url and Downloader
+
+## 1.0.2 - Never Released
+
+- Update PHPunit test configs
+- Add humbug support
+- Update Downloader tests
+- Fix automated tests
+
+## 1.0.1 - 2016-09-19
+
+- Pushed to composer, so update the README.md
+
 ## 1.0.0 - 2016-09-19
 
 - package forked
