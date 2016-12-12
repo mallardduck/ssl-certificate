@@ -50,14 +50,14 @@ class SslCertificate
         return new static($downloadResults);
     }
 
-    private function extractCrlLinks($rawCrlPoints)
+    private function extractCrlLinks($rawCrlPoints): string
     {
         $tempCrlItem = explode('URI:', $rawCrlPoints);
         $cleanCrlItem = trim($tempCrlItem[1]);
         return $cleanCrlItem;
     }
 
-    private function setcrlLinks($rawCrlInput)
+    private function setcrlLinks($rawCrlInput)//: void Added as comment until 7.1 <3
     {
         $crlLinks = [];
         $crlRawItems = explode('Full Name:', $rawCrlInput);
@@ -71,7 +71,7 @@ class SslCertificate
         $this->crlLinks = $crlLinks;
     }
 
-    private function getRevokedDate()
+    private function getRevokedDate()//: ?Carbon Added as comment until 7.1 <3
     {
         foreach ($this->crl->getRevokedList() as $broke) {
             if ($this->serial->equals($broke['userCertificate'])) {
@@ -80,7 +80,7 @@ class SslCertificate
         }
     }
 
-    private function parseCertChains(array $chains)
+    private function parseCertChains(array $chains): array
     {
         $output = [];
         foreach ($chains as $cert) {
@@ -140,7 +140,7 @@ class SslCertificate
         return isset($this->certificateFields['extensions']['crlDistributionPoints']);
     }
 
-    public function getCrlLinks(): array
+    public function getCrlLinks()//: ?array Added as comment until 7.1 <3
     {
         if (!$this->hasCrlLink()) {
             return null;
@@ -148,7 +148,7 @@ class SslCertificate
         return $this->crlLinks;
     }
 
-    public function getCrl()
+    public function getCrl()//: ?SslRevocationList Added as comment until 7.1 <3
     {
         if (!$this->hasCrlLink()) {
             return null;
@@ -157,7 +157,7 @@ class SslCertificate
         return $this->crl;
     }
 
-    public function isClrRevoked()
+    public function isClrRevoked()//: ?bool Added as comment until 7.1 <3
     {
         if (!$this->hasCrlLink()) {
             return null;
@@ -171,7 +171,7 @@ class SslCertificate
         return false;
     }
 
-    public function getCrlRevokedTime()
+    public function getCrlRevokedTime()//: ?Carbon Added as comment until 7.1 <3
     {
         if ($this->isClrRevoked()) {
             return $this->revokedTime;
@@ -228,12 +228,12 @@ class SslCertificate
         return $this->expirationDate()->isPast();
     }
 
-    public function isTrusted()
+    public function isTrusted(): bool
     {
         return $this->trusted;
     }
 
-    public function isValid(string $url = null)
+    public function isValid(string $url = null): bool
     {
         // Verify SSL not expired
         if (! Carbon::now()->between($this->validFromDate(), $this->expirationDate())) {

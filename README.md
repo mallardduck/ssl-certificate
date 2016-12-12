@@ -11,7 +11,7 @@ This variant is able to detect if an ssl is:
 
 Additionally, this package tracks and provides methods to view SSL Chain information.
 
-Here's an example:
+Here are a few examples:
 
 ```php
 $certificate = SslCertificate::createForHostName('liquidweb.com');
@@ -20,6 +20,7 @@ $certificate->getIssuer(); // returns "GlobalSign Extended Validation CA - SHA25
 $certificate->isValid(); // returns true if the certificate is currently valid
 $certificate->isTrusted(); // returns true if the certificate is trusted by default
 $certificate->isClrRevoked(); // returns bool of revoked status, or null if no list provided
+$certificate->hasSslChain(); // returns bool of ssl chain status
 $certificate->expirationDate(); // returns an instance of Carbon
 $certificate->expirationDate()->diffInDays(); // returns an int
 $certificate->getSignatureAlgorithm(); // returns a string
@@ -88,13 +89,13 @@ A domain name return with this method can start with `*` meaning it is valid for
 ### Getting the date when the certificate becomes valid
 
 ```php
-$this->certificate->validFromDate(); // returns an instance of Carbon
+$certificate->validFromDate(); // returns an instance of Carbon
 ```
 
 ### Getting the expiration date
 
 ```php
-$this->certificate->expirationDate(); // returns an instance of Carbon
+$certificate->expirationDate(); // returns an instance of Carbon
 ```
 
 ### Determining if the certificate is still valid
@@ -102,14 +103,14 @@ $this->certificate->expirationDate(); // returns an instance of Carbon
 Returns true if the current Date and time is between `validFromDate` and `expirationDate`.
 
 ```php
-$this->certificate->isValid(); // returns a boolean
+$certificate->isValid(); // returns a boolean
 ```
 
 You also use this method to determine if a given domain is covered by the certificate. Of course it'll keep checking if the current Date and time is between `validFromDate` and `expirationDate`.
 
 ```php
-$this->certificate->isValid('liquidweb.com'); // returns true;
-$this->certificate->isValid('spatie.be'); // returns false;
+$certificate->isValid('liquidweb.com'); // returns true;
+$certificate->isValid('spatie.be'); // returns false;
 ```
 
 ### Determining if the certificate is still valid until a given date
@@ -117,13 +118,13 @@ $this->certificate->isValid('spatie.be'); // returns false;
 Returns true if the certificate is valid and if the `expirationDate` is before the given date.
 
 ```php
-$this->certificate->isValidUntil(Carbon::now()->addDays(7)); // returns a boolean
+$certificate->isValidUntil(Carbon::now()->addDays(7)); // returns a boolean
 ```
 
 ### Determining if the certificate is expired
 
 ```php
-$this->certificate->isExpired(); // returns a boolean if expired
+$certificate->isExpired(); // returns a boolean if expired
 ```
 
 ## Changelog

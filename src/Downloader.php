@@ -96,8 +96,8 @@ class Downloader
         if (count($response["ssl"]["peer_certificate_chain"]) > 1) {
             foreach ($response["ssl"]["peer_certificate_chain"] as $cert) {
                 $parsedCert = openssl_x509_parse($cert);
-                $isChain = ($parsedCert['hash'] !== $results['cert']['hash']);
-                if ($isChain) {
+                $isChain = !($parsedCert['hash'] === $results['cert']['hash']);
+                if ($isChain === true) {
                     array_push($results['full_chain'], $parsedCert);
                 }
             }
