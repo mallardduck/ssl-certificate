@@ -16,7 +16,7 @@ class Url
     /** @var string */
     protected $validatedURL;
 
-    /** @var int */
+    /** @var string */
     protected $ipAddress;
 
     private static function verifyAndGetDNS($domain): string

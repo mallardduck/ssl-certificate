@@ -35,12 +35,12 @@ class SslChain
     /** @var string */
     protected $signatureType;
 
-    private function setValidFromDate($utcInput): Carbon
+    private static function setValidFromDate($utcInput): Carbon
     {
         return Carbon::createFromTimestampUTC($utcInput);
     }
 
-    private function setValidToDate($utcInput): Carbon
+    private static function setValidToDate($utcInput): Carbon
     {
         return Carbon::createFromTimestampUTC($utcInput);
     }

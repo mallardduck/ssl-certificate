@@ -20,7 +20,7 @@ class Downloader
     {
         // Trusted variable to keep track of SSL trust
         $trusted = true;
-        $sslConfig = StreamConfig::configSecure($timeout);
+        $sslConfig = StreamConfig::configSecure();
         $parsedUrl = new Url($url);
         $hostName = $parsedUrl->getHostName();
 
@@ -35,10 +35,8 @@ class Downloader
             );
             unset($sslConfig);
         } catch (Throwable $thrown) {
-            // Unset previous vars just to keep things legit
-            unset($client);
             // Try agian in insecure mode
-            $sslConfig = StreamConfig::configInsecure($timeout);
+            $sslConfig = StreamConfig::configInsecure();
 
             try {
                 // As the URL failed verification we set to false
@@ -91,11 +89,11 @@ class Downloader
         $response = stream_context_get_options($client);
         $results['connection'] = stream_get_meta_data($client)['crypto'];
         unset($client);
-        $results['cert'] = openssl_x509_parse($response['ssl']['peer_certificate']);
+        $results['cert'] = openssl_x509_parse($response['ssl']['peer_certificate'], true);
 
         if (count($response["ssl"]["peer_certificate_chain"]) > 1) {
             foreach ($response["ssl"]["peer_certificate_chain"] as $cert) {
-                $parsedCert = openssl_x509_parse($cert);
+                $parsedCert = openssl_x509_parse($cert, true);
                 $isChain = !($parsedCert['hash'] === $results['cert']['hash']);
                 if ($isChain === true) {
                     array_push($results['full_chain'], $parsedCert);

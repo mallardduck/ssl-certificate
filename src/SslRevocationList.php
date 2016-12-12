@@ -10,7 +10,7 @@ class SslRevocationList
     /** @var Carbon */
     protected $timestamp;
 
-    /** @var array */
+    /** @var IssuerMeta */
     protected $issuer;
 
     /** @var Carbon */
@@ -19,11 +19,11 @@ class SslRevocationList
     /** @var Carbon */
     protected $expiration;
 
-    /** @var Carbon */
+    /** @var int */
     protected $ttl;
 
     /** @var string */
-    protected $signature = [];
+    protected $signature;
 
     /** @var array */
     protected $signatureAlgorithm = [];

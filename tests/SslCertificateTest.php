@@ -67,7 +67,7 @@ class SslCertificateTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function it_can_determine_crl_status()
     {
-        $this->assertSame(null, $this->certificate->isClrRevoked());
+        $this->assertSame(null, $this->certificate->isRevoked());
     }
 
     /** @test */
@@ -205,7 +205,7 @@ class SslCertificateTest extends PHPUnit_Framework_TestCase
         $rawRevokedFields = json_decode(file_get_contents(__DIR__.'/stubs/revokedCertificateFields.json'), true);
         $revokedSslCert = new SslCertificate($rawRevokedFields);
 
-        $this->assertSame(true, $revokedSslCert->isClrRevoked());
+        $this->assertSame(true, $revokedSslCert->isRevoked());
         $this->assertSame(false, $revokedSslCert->isValid());
         $this->assertInternalType('object', $revokedSslCert->getCrlRevokedTime());
     }

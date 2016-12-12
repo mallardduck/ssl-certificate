@@ -8,7 +8,7 @@ use LiquidWeb\SslCertificate\SslChain;
 
 class SslChainTest extends PHPUnit_Framework_TestCase
 {
-    /** @var SslCertificate */
+    /** @var SslChain */
     protected $chain;
 
     public function setUp()
