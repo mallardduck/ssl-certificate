@@ -10,12 +10,6 @@ use Throwable;
 class Downloader
 {
 
-    /** @var string */
-    protected $inputUrl;
-
-    /** @var array */
-    protected $results;
-
     public static function downloadCertificateFromUrl(string $url, int $timeout = 30): array
     {
         // Trusted variable to keep track of SSL trust
@@ -23,6 +17,7 @@ class Downloader
         $sslConfig = StreamConfig::configSecure();
         $parsedUrl = new Url($url);
         $hostName = $parsedUrl->getHostName();
+        $client = null;
 
         try {
             $client = stream_socket_client(
@@ -73,10 +68,11 @@ class Downloader
             }
         }
 
-        return self::prepareCertificateResponse($client, $trusted, $parsedUrl->getIp(), $parsedUrl->getTestURL());
+        $sslData = self::prepareCertificateResponse($client, $trusted, $parsedUrl->getIp(), $parsedUrl->getTestURL());
+        return $sslData;
     }
 
-    private static function prepareCertificateResponse($client, bool $trusted, string $domainIp, string $testedUrl): array
+    private static function prepareCertificateResponse($resultClient, bool $trusted, string $domainIp, string $testedUrl): array
     {
         $results = [
             'tested' => $testedUrl,
@@ -86,9 +82,9 @@ class Downloader
             'full_chain' => [],
             'connection' => [],
         ];
-        $response = stream_context_get_options($client);
-        $results['connection'] = stream_get_meta_data($client)['crypto'];
-        unset($client);
+        $response = stream_context_get_options($resultClient);
+        $results['connection'] = stream_get_meta_data($resultClient)['crypto'];
+        unset($resultClient);
         $results['cert'] = openssl_x509_parse($response['ssl']['peer_certificate'], true);
 
         if (count($response["ssl"]["peer_certificate_chain"]) > 1) {

@@ -58,7 +58,7 @@ class Url
             }
         }
 
-        if (! filter_var((string) $this->getValidUrl(), FILTER_VALIDATE_URL)) {
+        if (! filter_var($this->getValidUrl(), FILTER_VALIDATE_URL)) {
             throw InvalidUrl::couldNotValidate($url);
         }
 

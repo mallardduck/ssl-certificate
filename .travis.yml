@@ -10,11 +10,14 @@ env:
     - COMPOSER_FLAGS=""
 
 before_script:
+  - bash .travis.sh
   - travis_retry composer self-update
   - travis_retry composer update ${COMPOSER_FLAGS} --no-interaction --prefer-source
 
 script:
   - phpunit --coverage-text --coverage-clover=coverage.clover
+  - vendor/bin/phpstan analyse -l4 src tests
+  - vendor/bin/phan --project-root-directory --progress-bar -o phan.out
 
 after_script:
   - php vendor/bin/ocular code-coverage:upload --format=php-clover coverage.clover

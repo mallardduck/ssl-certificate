@@ -218,5 +218,4 @@ class SslCertificateTest extends PHPUnit_Framework_TestCase
 
         $this->assertSame(false, $incompleteSslCert->hasSslChain());
     }
-
 }
