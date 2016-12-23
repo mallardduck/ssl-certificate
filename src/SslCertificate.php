@@ -270,6 +270,9 @@ class SslCertificate
 
     public function appliesToUrl(string $url): bool
     {
+        if (starts_with($url, '*.') === true) {
+            $url = substr($url, 2);
+        }
         $host = (new Url($url))->getHostName();
 
         $certificateHosts = array_merge([$this->getDomain()], $this->getAdditionalDomains());
@@ -289,10 +292,6 @@ class SslCertificate
 
     protected function wildcardHostCoversHost(string $wildcardHost, string $host): bool
     {
-        if ($host === $wildcardHost) {
-            return true;
-        }
-
         if (! starts_with($wildcardHost, '*')) {
             return false;
         }

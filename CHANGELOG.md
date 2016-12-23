@@ -2,6 +2,10 @@
 
 All notable changes to `ssl-certificate` will be documented in this file
 
+## 2.1.1 - 2016-12-22
+
+- Fix for wildcard SANs
+
 ## 2.1.0 - 2016-12-22
 
 - Add support for travis-ci
