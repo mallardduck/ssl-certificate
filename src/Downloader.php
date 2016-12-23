@@ -66,9 +66,7 @@ class Downloader
             }
         }
 
-        $sslData = self::prepareCertificateResponse($client, $trusted, $parsedUrl->getIp(), $parsedUrl->getTestURL());
-
-        return $sslData;
+        return self::prepareCertificateResponse($client, $trusted, $parsedUrl->getIp(), $parsedUrl->getTestURL());
     }
 
     private static function prepareCertificateResponse($resultClient, bool $trusted, string $domainIp, string $testedUrl): array

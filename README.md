@@ -1,5 +1,12 @@
 # A php package to validate SSL certificates
 
+[![Build Status](https://travis-ci.org/liquidweb/ssl-certificate.svg?branch=master)](https://travis-ci.org/liquidweb/ssl-certificate)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/liquidweb/ssl-certificate/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/liquidweb/ssl-certificate/?branch=master)
+[![Scrutinizer Code Coverage](https://scrutinizer-ci.com/g/liquidweb/ssl-certificate/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/liquidweb/ssl-certificate/?branch=master)
+[![Scrutinizer Build Status](https://scrutinizer-ci.com/g/liquidweb/ssl-certificate/badges/build.png?b=master)](https://scrutinizer-ci.com/g/liquidweb/ssl-certificate/build-status/master)
+[![StyleCI](https://styleci.io/repos/68636263/shield?branch=master)](https://styleci.io/repos/68636263)
+[![Total Downloads](https://img.shields.io/packagist/dt/spatie/ssl-certificate.svg?style=flat-square)](https://packagist.org/packages/liquidweb/ssl-certificate)
+
 This package was inspired by, and forked from, the original [spatie/ssl-certificate](https://github.com/spatie/ssl-certificate) SSL certificate data validation and query class. Where this package differs is the scope of validation and intended goals. This package takes the SSL certificate validation a few steps further than the original class that inspired it.
 
 This variant is able to detect if an ssl is:
