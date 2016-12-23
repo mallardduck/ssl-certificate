@@ -71,7 +71,7 @@ class SslCertificate
         return $crlLinks;
     }
 
-    private function getRevokedDate()//: ?Carbon Added as comment until 7.1 <3
+    private function getRevokedDate()
     {
         foreach ($this->crl->getRevokedList() as $broke) {
             if ($this->serial->equals($broke['userCertificate'])) {
@@ -80,7 +80,7 @@ class SslCertificate
         }
     }
 
-    private function isClrRevoked()//: ?bool Added as comment until 7.1 <3
+    private function isClrRevoked()
     {
         if (!$this->hasCrlLink()) {
             return null;
@@ -154,7 +154,7 @@ class SslCertificate
         return isset($this->certificateFields['extensions']['crlDistributionPoints']);
     }
 
-    public function getCrlLinks()//: ?array Added as comment until 7.1 <3
+    public function getCrlLinks()
     {
         if (!$this->hasCrlLink()) {
             return null;
@@ -162,7 +162,7 @@ class SslCertificate
         return $this->crlLinks;
     }
 
-    public function getCrl()//: ?SslRevocationList Added as comment until 7.1 <3
+    public function getCrl()
     {
         if (!$this->hasCrlLink()) {
             return null;
@@ -171,12 +171,12 @@ class SslCertificate
         return $this->crl;
     }
 
-    public function isRevoked()//: ?bool Added as comment until 7.1 <3
+    public function isRevoked()
     {
         return $this->revoked;
     }
 
-    public function getCrlRevokedTime()//: ?Carbon Added as comment until 7.1 <3
+    public function getCrlRevokedTime()
     {
         if ($this->isRevoked()) {
             return $this->revokedTime;
