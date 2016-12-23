@@ -130,5 +130,4 @@ class SslChainTest extends PHPUnit_Framework_TestCase
 
         $this->assertSame('Certification Services Division', $revokedSslCert->getIssuerOrganizationUnitName());
     }
-
 }
