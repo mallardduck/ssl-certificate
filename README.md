@@ -3,7 +3,6 @@
 [![Build Status](https://travis-ci.org/liquidweb/ssl-certificate.svg?branch=master)](https://travis-ci.org/liquidweb/ssl-certificate)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/liquidweb/ssl-certificate/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/liquidweb/ssl-certificate/?branch=master)
 [![Scrutinizer Code Coverage](https://scrutinizer-ci.com/g/liquidweb/ssl-certificate/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/liquidweb/ssl-certificate/?branch=master)
-[![Scrutinizer Build Status](https://scrutinizer-ci.com/g/liquidweb/ssl-certificate/badges/build.png?b=master)](https://scrutinizer-ci.com/g/liquidweb/ssl-certificate/build-status/master)
 [![StyleCI](https://styleci.io/repos/68636263/shield?branch=master)](https://styleci.io/repos/68636263)
 [![Total Downloads](https://img.shields.io/packagist/dt/spatie/ssl-certificate.svg?style=flat-square)](https://packagist.org/packages/liquidweb/ssl-certificate)
 

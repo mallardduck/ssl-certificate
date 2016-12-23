@@ -2,7 +2,21 @@
 
 All notable changes to `ssl-certificate` will be documented in this file
 
-## 2.0.0 - 2016-12-12
+## 2.1.0 - 2016-12-22
+
+- Add support for travis-ci
+- Add support for scrutinizer-ci
+- Add support for styleci
+- Move helper functions from Url class to helper file
+- Remove comments from 1.1.1 since they make Scrutinizer sad
+- Fix slightly flawed logic in SslCertificate isValid function (this brings the minor bump)
+- Clean up multiple functions that had unnecessary arguments
+- Run styleci and merge in changes
+- Add badges to README file!
+- Update CHANGELOG.md file
+- Update README.md file
+
+## 2.0.0 & 2.0.1 - 2016-12-12
 
 - Update CHANGELOG.md file
 - Add etsy/phan support
