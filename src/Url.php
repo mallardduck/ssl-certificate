@@ -28,22 +28,6 @@ class Url
         return $domainIp;
     }
 
-    private static function isValidFqdn($domain): bool
-    {
-        if (!filter_var($domain, FILTER_VALIDATE_DOMAIN)) {
-            return false;
-        }
-        return true;
-    }
-
-    private static function isValidUrl($domain): bool
-    {
-        if (!filter_var($domain, FILTER_VALIDATE_URL)) {
-            return false;
-        }
-        return true;
-    }
-
     public function __construct(string $url)
     {
         $this->inputUrl = $url;

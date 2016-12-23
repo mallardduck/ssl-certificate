@@ -57,11 +57,11 @@ class SslCertificate
         return $cleanCrlItem;
     }
 
-    private static function setcrlLinks($rawCrlInput)//: void Added as comment until 7.1 <3
+    private static function parseCrlLinks($rawCrlInput): array
     {
         $crlLinks = [];
         $crlRawItems = explode('Full Name:', $rawCrlInput);
-      // Remove the stuff before the first 'Full Name:' item
+        // Remove the stuff before the first 'Full Name:' item
         array_splice($crlRawItems, 0, 1);
         foreach ($crlRawItems as $item) {
             $crlLink = self::extractCrlLinks($item);
@@ -71,7 +71,7 @@ class SslCertificate
         return $crlLinks;
     }
 
-    private function getRevokedDate()//: ?Carbon Added as comment until 7.1 <3
+    private function getRevokedDate()
     {
         foreach ($this->crl->getRevokedList() as $broke) {
             if ($this->serial->equals($broke['userCertificate'])) {
@@ -80,7 +80,7 @@ class SslCertificate
         }
     }
 
-    private function isClrRevoked()//: ?bool Added as comment until 7.1 <3
+    private function isClrRevoked()
     {
         if (!$this->hasCrlLink()) {
             return null;
@@ -114,7 +114,7 @@ class SslCertificate
         $this->connectionMeta = $downloadResults['connection'];
 
         if (isset($downloadResults['cert']['extensions']['crlDistributionPoints'])) {
-            $this->crlLinks = self::setcrlLinks($downloadResults['cert']['extensions']['crlDistributionPoints']);
+            $this->crlLinks = self::parseCrlLinks($downloadResults['cert']['extensions']['crlDistributionPoints']);
             $this->crl = SslRevocationList::createFromUrl($this->getCrlLinks()[0]);
             $this->revoked = $this->isClrRevoked();
             $this->revokedTime = $this->getRevokedDate();
@@ -154,7 +154,7 @@ class SslCertificate
         return isset($this->certificateFields['extensions']['crlDistributionPoints']);
     }
 
-    public function getCrlLinks()//: ?array Added as comment until 7.1 <3
+    public function getCrlLinks()
     {
         if (!$this->hasCrlLink()) {
             return null;
@@ -162,7 +162,7 @@ class SslCertificate
         return $this->crlLinks;
     }
 
-    public function getCrl()//: ?SslRevocationList Added as comment until 7.1 <3
+    public function getCrl()
     {
         if (!$this->hasCrlLink()) {
             return null;
@@ -171,12 +171,12 @@ class SslCertificate
         return $this->crl;
     }
 
-    public function isRevoked()//: ?bool Added as comment until 7.1 <3
+    public function isRevoked()
     {
         return $this->revoked;
     }
 
-    public function getCrlRevokedTime()//: ?Carbon Added as comment until 7.1 <3
+    public function getCrlRevokedTime()
     {
         if ($this->isRevoked()) {
             return $this->revokedTime;
@@ -245,8 +245,8 @@ class SslCertificate
             return false;
         }
         // If a URL is provided verify the SSL applies to the domain
-        if (! empty($url)) {
-            return $this->appliesToUrl($url ?? $this->getDomain());
+        if ($this->appliesToUrl($url ?? $this->getDomain()) === false) {
+            return false;
         }
         // Check SerialNumber for CRL list
         if ($this->isRevoked()) {

@@ -35,12 +35,12 @@ class SslRevocationList
     {
         $downloadResults = Downloader::downloadRevocationListFromUrl($url);
         $tbsCertList = $downloadResults['tbsCertList'];
-        $issuer = IssuerMeta::fromRdnSequence($downloadResults['tbsCertList']['issuer']['rdnSequence']);
-        $createdAt = $downloadResults['tbsCertList']['thisUpdate']['utcTime'];
-        $expiration = $downloadResults['tbsCertList']['nextUpdate']['utcTime'];
+        $issuer = IssuerMeta::fromRdnSequence($tbsCertList['issuer']['rdnSequence']);
+        $createdAt = $tbsCertList['thisUpdate']['utcTime'];
+        $expiration = $tbsCertList['nextUpdate']['utcTime'];
         $signature = $downloadResults['signature'];
         $signatureAlgorithm = $downloadResults['signatureAlgorithm'];
-        $certsList = $downloadResults['tbsCertList']['revokedCertificates'];
+        $certsList = $tbsCertList['revokedCertificates'];
 
         return new static($issuer, $createdAt, $expiration, $signature, $signatureAlgorithm, $certsList);
     }
