@@ -2,14 +2,12 @@
 
 namespace LiquidWeb\SslCertificate;
 
-use LiquidWeb\SslCertificate\Exceptions\CouldNotDownloadCertificate;
-use LiquidWeb\SslCertificate\StreamConfig;
-use phpseclib\File\X509;
 use Throwable;
+use phpseclib\File\X509;
+use LiquidWeb\SslCertificate\Exceptions\CouldNotDownloadCertificate;
 
 class Downloader
 {
-
     public static function downloadCertificateFromUrl(string $url, int $timeout = 30): array
     {
         // Trusted variable to keep track of SSL trust
@@ -69,6 +67,7 @@ class Downloader
         }
 
         $sslData = self::prepareCertificateResponse($client, $trusted, $parsedUrl->getIp(), $parsedUrl->getTestURL());
+
         return $sslData;
     }
 
@@ -87,10 +86,10 @@ class Downloader
         unset($resultClient);
         $results['cert'] = openssl_x509_parse($response['ssl']['peer_certificate'], true);
 
-        if (count($response["ssl"]["peer_certificate_chain"]) > 1) {
-            foreach ($response["ssl"]["peer_certificate_chain"] as $cert) {
+        if (count($response['ssl']['peer_certificate_chain']) > 1) {
+            foreach ($response['ssl']['peer_certificate_chain'] as $cert) {
                 $parsedCert = openssl_x509_parse($cert, true);
-                $isChain = !($parsedCert['hash'] === $results['cert']['hash']);
+                $isChain = ! ($parsedCert['hash'] === $results['cert']['hash']);
                 if ($isChain === true) {
                     array_push($results['full_chain'], $parsedCert);
                 }
@@ -109,6 +108,7 @@ class Downloader
         $x509 = new X509();
         $crl = $x509->loadCRL($file); // see ev2009a.crl
         unset($x509, $file);
+
         return $crl;
     }
 }

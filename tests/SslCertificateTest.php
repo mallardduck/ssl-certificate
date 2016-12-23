@@ -61,7 +61,7 @@ class SslCertificateTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function it_can_determine_the_tested_domain()
     {
-        $this->assertSame("spatie.be:443", $this->certificate->getTestedDomain());
+        $this->assertSame('spatie.be:443', $this->certificate->getTestedDomain());
     }
 
     /** @test */
@@ -73,13 +73,13 @@ class SslCertificateTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function it_can_get_the_raw_fields()
     {
-        $this->assertInternalType("array", $this->certificate->getCertificateFields());
+        $this->assertInternalType('array', $this->certificate->getCertificateFields());
     }
 
     /** @test */
     public function it_can_get_the_chains()
     {
-        $this->assertInternalType("array", $this->certificate->getCertificateChains());
+        $this->assertInternalType('array', $this->certificate->getCertificateChains());
     }
 
     /** @test */

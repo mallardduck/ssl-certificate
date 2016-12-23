@@ -4,7 +4,6 @@ namespace LiquidWeb\SslCertificate;
 
 class IssuerMeta
 {
-
     protected $commonName;
     protected $countryName;
     protected $organizationName;
@@ -26,9 +25,9 @@ class IssuerMeta
 
     public function __construct(array $input = [])
     {
-        $this->commonName = isset($input['commonName']) ? $input['commonName'] : "";
-        $this->countryName = ($input['countryName']) ? $input['countryName'] : "";
-        $this->organizationName = isset($input['organizationName']) ? $input['organizationName'] : "";
-        $this->organizationUnitName = isset($input['organizationalUnitName'])? $input['organizationalUnitName'] : "";
+        $this->commonName = isset($input['commonName']) ? $input['commonName'] : '';
+        $this->countryName = ($input['countryName']) ? $input['countryName'] : '';
+        $this->organizationName = isset($input['organizationName']) ? $input['organizationName'] : '';
+        $this->organizationUnitName = isset($input['organizationalUnitName']) ? $input['organizationalUnitName'] : '';
     }
 }

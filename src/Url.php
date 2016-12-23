@@ -22,9 +22,10 @@ class Url
     private static function verifyAndGetDNS($domain): string
     {
         $domainIp = gethostbyname($domain);
-        if (!filter_var($domainIp, FILTER_VALIDATE_IP)) {
+        if (! filter_var($domainIp, FILTER_VALIDATE_IP)) {
             throw InvalidUrl::couldNotResolveDns($domain);
         }
+
         return $domainIp;
     }
 
@@ -80,6 +81,7 @@ class Url
         if ($this->getPort() === '80') {
             return 'http://'.$this->getHostName().'/';
         }
+
         return 'https://'.$this->getHostName().'/';
     }
 }
