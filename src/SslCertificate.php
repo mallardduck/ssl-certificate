@@ -57,11 +57,11 @@ class SslCertificate
         return $cleanCrlItem;
     }
 
-    private static function getcrlLinks($rawCrlInput): array
+    private static function parseCrlLinks($rawCrlInput): array
     {
         $crlLinks = [];
         $crlRawItems = explode('Full Name:', $rawCrlInput);
-      // Remove the stuff before the first 'Full Name:' item
+        // Remove the stuff before the first 'Full Name:' item
         array_splice($crlRawItems, 0, 1);
         foreach ($crlRawItems as $item) {
             $crlLink = self::extractCrlLinks($item);
@@ -114,7 +114,7 @@ class SslCertificate
         $this->connectionMeta = $downloadResults['connection'];
 
         if (isset($downloadResults['cert']['extensions']['crlDistributionPoints'])) {
-            $this->crlLinks = self::getcrlLinks($downloadResults['cert']['extensions']['crlDistributionPoints']);
+            $this->crlLinks = self::parseCrlLinks($downloadResults['cert']['extensions']['crlDistributionPoints']);
             $this->crl = SslRevocationList::createFromUrl($this->getCrlLinks()[0]);
             $this->revoked = $this->isClrRevoked();
             $this->revokedTime = $this->getRevokedDate();

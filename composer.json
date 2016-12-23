@@ -21,9 +21,10 @@
         "ext-openssl": "*",
         "league/uri": "^4.2",
         "nesbot/carbon": "^1.21",
-        "phpseclib/phpseclib": "^2.0"
+        "phpseclib/phpseclib": "^2.0.3"
     },
     "require-dev": {
+        "ext-ast": "*",
         "etsy/phan": "dev-master",
         "phpstan/phpstan": "^0.4.2",
         "phpunit/phpunit": "5.7.*"
