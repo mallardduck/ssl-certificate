@@ -142,12 +142,12 @@ class SslChain
         return true;
     }
 
-    public function isValidUntil(Carbon $carbon, string $url = null): bool
+    public function isValidUntil(Carbon $carbon): bool
     {
         if ($this->expirationDate()->gt($carbon)) {
             return false;
         }
 
-        return $this->isValid($url);
+        return $this->isValid();
     }
 }

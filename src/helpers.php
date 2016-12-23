@@ -7,6 +7,22 @@ function verifyWebUrl(string $protocol) : bool
     return in_array($protocol, [null, 'http', 'https']);
 }
 
+function isValidFqdn($domain): bool
+{
+    if (!filter_var($domain, FILTER_VALIDATE_DOMAIN)) {
+        return false;
+    }
+    return true;
+}
+
+function isValidUrl($domain): bool
+{
+    if (!filter_var($domain, FILTER_VALIDATE_URL)) {
+        return false;
+    }
+    return true;
+}
+
 function starts_with($haystack, $needles): bool
 {
     foreach ((array) $needles as $needle) {
