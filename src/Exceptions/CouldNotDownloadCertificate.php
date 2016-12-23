@@ -19,9 +19,10 @@ class CouldNotDownloadCertificate extends Exception
 
     public static function failedHandshake(Url $url): CouldNotDownloadCertificate
     {
-        if ($url->getPort() === "80") {
-            return new static("Server does not support SSL over port 80.");
+        if ($url->getPort() === '80') {
+            return new static('Server does not support SSL over port 80.');
         }
+
         return new static("Server SSL handshake error – the certificate for `{$url->getTestURL()}` will not work.");
     }
 

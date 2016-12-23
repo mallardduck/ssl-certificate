@@ -9,7 +9,6 @@ use LiquidWeb\SslCertificate\Exceptions\CouldNotDownloadCertificate;
 
 class DownloaderTest extends PHPUnit_Framework_TestCase
 {
-
     /** @test */
     public function it_can_download_a_certificate_from_a_host_name()
     {
@@ -32,7 +31,6 @@ class DownloaderTest extends PHPUnit_Framework_TestCase
 
         $this->assertSame('/C=US/ST=California/L=San Francisco/O=BadSSL Fallback. Unknown subdomain or no SNI./CN=badssl-fallback-unknown-subdomain-or-no-sni', $downloadResults['cert']['name']);
     }
-
 
     /** @test */
     public function it_can_throw_ssl_errors_correctly()

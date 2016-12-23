@@ -4,7 +4,6 @@ namespace LiquidWeb\SslCertificate;
 
 class StreamConfig
 {
-
     /**
      * The stream settings for the client.
      *
@@ -48,9 +47,9 @@ class StreamConfig
         $streamContext = stream_context_create(
             [
             'http' => [
-                'method' => "GET",
+                'method' => 'GET',
                 'max_redirects' => '0',
-                'ignore_errors' => '1'
+                'ignore_errors' => '1',
                 ],
             ]
         );

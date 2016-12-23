@@ -7,7 +7,6 @@ use phpseclib\Math\BigInteger;
 
 class SslChain
 {
-
     /** @var string */
     protected $name;
 
@@ -100,6 +99,7 @@ class SslChain
                 return $this->issuer['OU'][0] ?? '';
             }
         }
+
         return $this->issuer['OU'] ?? '';
     }
 

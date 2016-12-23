@@ -3,8 +3,8 @@
 namespace LiquidWeb\SslCertificate\Test;
 
 use PHPUnit_Framework_TestCase;
-use LiquidWeb\SslCertificate\Exceptions\InvalidUrl;
 use LiquidWeb\SslCertificate\Url;
+use LiquidWeb\SslCertificate\Exceptions\InvalidUrl;
 
 class UrlTest extends PHPUnit_Framework_TestCase
 {

@@ -3,7 +3,6 @@
 namespace LiquidWeb\SslCertificate;
 
 use Carbon\Carbon;
-use LiquidWeb\SslCertificate\IssuerMeta;
 
 class SslRevocationList
 {
@@ -45,7 +44,7 @@ class SslRevocationList
         return new static($issuer, $createdAt, $expiration, $signature, $signatureAlgorithm, $certsList);
     }
 
-    public function __construct(IssuerMeta $issuer = null, string $createdAt = "", string $expiration = "", string $signature = "", array $signatureAlgorithm = [], array $certsList = [])
+    public function __construct(IssuerMeta $issuer = null, string $createdAt = '', string $expiration = '', string $signature = '', array $signatureAlgorithm = [], array $certsList = [])
     {
         $this->timestamp = Carbon::now();
         $this->issuer = $issuer;

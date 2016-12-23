@@ -4,12 +4,9 @@ namespace LiquidWeb\SslCertificate;
 
 use Carbon\Carbon;
 use phpseclib\Math\BigInteger;
-use LiquidWeb\SslCertificate\SslChain;
-use LiquidWeb\SslCertificate\SslRevocationList;
 
 class SslCertificate
 {
-
     /** @var bool */
     protected $trusted;
 
@@ -54,6 +51,7 @@ class SslCertificate
     {
         $tempCrlItem = explode('URI:', $rawCrlPoints);
         $cleanCrlItem = trim($tempCrlItem[1]);
+
         return $cleanCrlItem;
     }
 
@@ -68,6 +66,7 @@ class SslCertificate
             array_push($crlLinks, $crlLink);
             unset($crlLink);
         }
+
         return $crlLinks;
     }
 
@@ -82,15 +81,17 @@ class SslCertificate
 
     private function isClrRevoked()
     {
-        if (!$this->hasCrlLink()) {
-            return null;
+        if (! $this->hasCrlLink()) {
+            return;
         }
         foreach ($this->crl->getRevokedList() as $broke) {
             if ($this->serial->equals($broke['userCertificate'])) {
                 $this->trusted = false;
+
                 return true;
             }
         }
+
         return false;
     }
 
@@ -100,6 +101,7 @@ class SslCertificate
         foreach ($chains as $cert) {
             array_push($output, new SslChain($cert));
         }
+
         return $output;
     }
 
@@ -126,6 +128,7 @@ class SslCertificate
         if (isset($this->certificateChains) && count($this->certificateChains) >= 1) {
             return true;
         }
+
         return false;
     }
 
@@ -156,16 +159,17 @@ class SslCertificate
 
     public function getCrlLinks()
     {
-        if (!$this->hasCrlLink()) {
-            return null;
+        if (! $this->hasCrlLink()) {
+            return;
         }
+
         return $this->crlLinks;
     }
 
     public function getCrl()
     {
-        if (!$this->hasCrlLink()) {
-            return null;
+        if (! $this->hasCrlLink()) {
+            return;
         }
 
         return $this->crl;
@@ -181,7 +185,6 @@ class SslCertificate
         if ($this->isRevoked()) {
             return $this->revokedTime;
         }
-        return null;
     }
 
     public function getResolvedIp(): string
