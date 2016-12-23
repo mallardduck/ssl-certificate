@@ -8,4 +8,4 @@ cd php-ast-master/
 phpize
 ./configure
 make
-sudo make install && echo "extension=<extension>.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+make install && echo "extension=<extension>.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
