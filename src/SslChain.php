@@ -133,7 +133,7 @@ class SslChain
         return $this->expirationDate()->isPast();
     }
 
-    public function isValid(string $url = null)
+    public function isValid()
     {
         if (! Carbon::now()->between($this->validFromDate(), $this->expirationDate())) {
             return false;
