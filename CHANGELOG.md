@@ -2,6 +2,11 @@
 
 All notable changes to `ssl-certificate` will be documented in this file
 
+## 2.2.1 - 2016-12-24
+
+- Refactor prepareCertificateResponse
+- Move Exception logic to handler class
+
 ## 2.1.1 - 2016-12-22
 
 - Fix for wildcard SANs
