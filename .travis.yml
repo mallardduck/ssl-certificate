@@ -1,5 +1,13 @@
 language: php
 
+## Run on container environment
+sudo: false
+
+## Cache composer bits
+cache:
+  directories:
+    - $HOME/.composer/cache
+
 php:
   - 7.0
   - 7.1
@@ -8,6 +16,7 @@ env:
   matrix:
     - COMPOSER_FLAGS="--prefer-lowest"
     - COMPOSER_FLAGS=""
+    - COMPOSER_FLAGS="--prefer-source"
 
 before_script:
   - bash .travis.sh
