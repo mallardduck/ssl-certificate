@@ -4,7 +4,7 @@ namespace LiquidWeb\SslCertificate;
 
 use Throwable;
 use phpseclib\File\X509;
-use LiquidWeb\SslCertificate\Exceptions\CouldNotDownloadCertificate;
+use LiquidWeb\SslCertificate\Exceptions\Handler;
 
 class Downloader
 {
@@ -14,7 +14,6 @@ class Downloader
         $trusted = true;
         $sslConfig = StreamConfig::configSecure();
         $parsedUrl = new Url($url);
-        $hostName = $parsedUrl->getHostName();
         $client = null;
 
         try {
@@ -46,23 +45,7 @@ class Downloader
 
                 return self::prepareCertificateResponse($client, $trusted, $parsedUrl->getIp(), $parsedUrl->getTestURL());
             } catch (Throwable $thrown) {
-                if (str_contains($thrown->getMessage(), 'getaddrinfo failed')) {
-                    throw CouldNotDownloadCertificate::hostDoesNotExist($hostName);
-                }
-
-                if (str_contains($thrown->getMessage(), 'error:14090086')) {
-                    throw CouldNotDownloadCertificate::noCertificateInstalled($hostName);
-                }
-
-                if (str_contains($thrown->getMessage(), 'error:14077410') || str_contains($thrown->getMessage(), 'error:140770FC')) {
-                    throw CouldNotDownloadCertificate::failedHandshake($parsedUrl);
-                }
-
-                if (str_contains($thrown->getMessage(), '(Connection timed out)')) {
-                    throw CouldNotDownloadCertificate::connectionTimeout($parsedUrl->getTestURL());
-                }
-
-                throw CouldNotDownloadCertificate::unknownError($parsedUrl->getTestURL(), $thrown->getMessage());
+                (new Handler($thrown))->downloadHandler($parsedUrl);
             }
         }
 
