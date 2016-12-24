@@ -192,14 +192,6 @@ class SslCertificateTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
-    public function it_can_create_an_instance_for_the_given_host()
-    {
-        $downloadedCertificate = SslCertificate::createForHostName('spatie.be');
-
-        $this->assertSame('spatie.be', $downloadedCertificate->getDomain());
-    }
-
-    /** @test */
     public function it_can_check_a_revoked_ssl()
     {
         $rawRevokedFields = json_decode(file_get_contents(__DIR__.'/stubs/revokedCertificateFields.json'), true);
