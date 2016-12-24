@@ -8,7 +8,6 @@ use function LiquidWeb\SslCertificate\str_contains as str_contains;
 
 class Handler
 {
-
     protected $thrown;
 
     public function __construct(Throwable $thrown)
@@ -18,22 +17,23 @@ class Handler
 
     public function downloadHandler(Url $parsedUrl)
     {
-        if (str_contains($this->thrown->getMessage(), 'getaddrinfo failed')) {
+        $errorMsg = $this->thrown->getMessage();
+        if (str_contains($errorMsg, 'getaddrinfo failed')) {
             throw CouldNotDownloadCertificate::hostDoesNotExist($parsedUrl->getHostName());
         }
 
-        if (str_contains($this->thrown->getMessage(), 'error:14090086')) {
+        if (str_contains($errorMsg, 'error:14090086')) {
             throw CouldNotDownloadCertificate::noCertificateInstalled($parsedUrl->getHostName());
         }
 
-        if (str_contains($this->thrown->getMessage(), 'error:14077410') || str_contains($this->thrown->getMessage(), 'error:140770FC')) {
+        if (str_contains($errorMsg, 'error:14077410') || str_contains($errorMsg, 'error:140770FC')) {
             throw CouldNotDownloadCertificate::failedHandshake($parsedUrl);
         }
 
-        if (str_contains($this->thrown->getMessage(), '(Connection timed out)')) {
+        if (str_contains($errorMsg, '(Connection timed out)')) {
             throw CouldNotDownloadCertificate::connectionTimeout($parsedUrl->getTestURL());
         }
 
-        throw CouldNotDownloadCertificate::unknownError($parsedUrl->getTestURL(), $this->thrown->getMessage());
+        throw CouldNotDownloadCertificate::unknownError($parsedUrl->getTestURL(), $errorMsg);
     }
 }

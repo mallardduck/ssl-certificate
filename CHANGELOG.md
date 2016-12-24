@@ -2,6 +2,11 @@
 
 All notable changes to `ssl-certificate` will be documented in this file
 
+## 2.2.2 - 2016-12-24
+
+- Remove unneeded return in downloadCertificateFromUrl
+- Update code for styleci
+
 ## 2.2.1 - 2016-12-24
 
 - Refactor prepareCertificateResponse
