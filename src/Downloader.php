@@ -54,30 +54,30 @@ class Downloader
 
     private static function prepareCertificateResponse($resultClient, bool $trusted, string $domainIp, string $testedUrl): array
     {
-        $results = [
-            'tested' => $testedUrl,
-            'trusted' => $trusted,
-            'dns-resolves-to' => $domainIp,
-            'cert' => null,
-            'full_chain' => [],
-            'connection' => [],
-        ];
         $response = stream_context_get_options($resultClient);
-        $results['connection'] = stream_get_meta_data($resultClient)['crypto'];
+        $connectionInfo = stream_get_meta_data($resultClient)['crypto'];
         unset($resultClient);
-        $results['cert'] = openssl_x509_parse($response['ssl']['peer_certificate'], true);
+        $mainCert = openssl_x509_parse($response['ssl']['peer_certificate'], true);
 
+        $full_chain = [];
         if (count($response['ssl']['peer_certificate_chain']) > 1) {
             foreach ($response['ssl']['peer_certificate_chain'] as $cert) {
                 $parsedCert = openssl_x509_parse($cert, true);
-                $isChain = ! ($parsedCert['hash'] === $results['cert']['hash']);
+                $isChain = ! ($parsedCert['hash'] === $mainCert['hash']);
                 if ($isChain === true) {
-                    array_push($results['full_chain'], $parsedCert);
+                    array_push($full_chain, $parsedCert);
                 }
             }
         }
 
-        return $results;
+        return [
+            'tested' => $testedUrl,
+            'trusted' => $trusted,
+            'dns-resolves-to' => $domainIp,
+            'cert' => $mainCert,
+            'full_chain' => $full_chain,
+            'connection' => $connectionInfo,
+        ];
     }
 
     public static function downloadRevocationListFromUrl(string $url): array
