@@ -47,10 +47,10 @@ class Downloader
             }
         }
 
-        return self::prepareCertificateResponse($client, $trusted, $parsedUrl->getIp(), $parsedUrl->getTestURL());
+        return self::prepareCertificateResponse($client, $trusted, $parsedUrl);
     }
 
-    private static function prepareCertificateResponse($resultClient, bool $trusted, string $domainIp, string $testedUrl): array
+    private static function prepareCertificateResponse($resultClient, bool $trusted, Url $parsedUrl): array
     {
         $response = stream_context_get_options($resultClient);
         $connectionInfo = stream_get_meta_data($resultClient)['crypto'];
@@ -69,10 +69,10 @@ class Downloader
         }
 
         return [
-            'inputDomain' => $parsedUrl,
-            'tested' => $testedUrl,
+            'inputDomain' => $parsedUrl->getInputUrl(),
+            'tested' => $parsedUrl->getTestURL(),
             'trusted' => $trusted,
-            'dns-resolves-to' => $domainIp,
+            'dns-resolves-to' => $parsedUrl->getIp(),
             'cert' => $mainCert,
             'full_chain' => $full_chain,
             'connection' => $connectionInfo,

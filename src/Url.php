@@ -56,6 +56,11 @@ class Url
         return $this->ipAddress;
     }
 
+    public function getInputUrl(): string
+    {
+        return $this->inputUrl;
+    }
+
     public function getHostName(): string
     {
         return $this->parsedUrl['host'];
