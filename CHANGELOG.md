@@ -2,6 +2,17 @@
 
 All notable changes to `ssl-certificate` will be documented in this file
 
+## 2.3.0 - 2016-01-06
+
+- Fixes issues caused by CloudFlare domains/SSLs
+- Misc updates for tests and travis-ci
+- Update response from Downloader to include the input domain
+- Update SslCertificate getDomain method to compare input domian with main SSL domain
+- Add new getCertificateDomain method to SslCertificate; this is literally the original getDomain method
+- Add new method to URL to getInputUrl
+- Update CHANGELOG.md file
+- Update README.md file
+
 ## 2.2.2 - 2016-12-24
 
 - Remove unneeded return in downloadCertificateFromUrl

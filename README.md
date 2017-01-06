@@ -1,10 +1,12 @@
 # A php package to validate SSL certificates
 
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/liquidweb/ssl-certificate.svg?style=flat-square)](https://packagist.org/packages/liquidweb/ssl-certificate)
+[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
 [![Build Status](https://travis-ci.org/liquidweb/ssl-certificate.svg?branch=master)](https://travis-ci.org/liquidweb/ssl-certificate)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/liquidweb/ssl-certificate/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/liquidweb/ssl-certificate/?branch=master)
 [![Scrutinizer Code Coverage](https://scrutinizer-ci.com/g/liquidweb/ssl-certificate/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/liquidweb/ssl-certificate/?branch=master)
 [![StyleCI](https://styleci.io/repos/68636263/shield?branch=master)](https://styleci.io/repos/68636263)
-[![Total Downloads](https://img.shields.io/packagist/dt/spatie/ssl-certificate.svg?style=flat-square)](https://packagist.org/packages/liquidweb/ssl-certificate)
+[![Total Downloads](https://img.shields.io/packagist/dt/liquidweb/ssl-certificate.svg?style=flat-square)](https://packagist.org/packages/liquidweb/ssl-certificate)
 
 This package was inspired by, and forked from, the original [spatie/ssl-certificate](https://github.com/spatie/ssl-certificate) SSL certificate data validation and query class. Where this package differs is the scope of validation and intended goals. This package takes the SSL certificate validation a few steps further than the original class that inspired it.
 
@@ -61,11 +63,21 @@ $certificate->getIssuer(); // returns "GlobalSign Extended Validation CA - SHA25
 
 ### Getting the domain name
 
-Returns the primary domain name for the certificate
+Getting a domain can be done one of two ways; you can either use `getDomain` or `getCertificateDomain`.
+They are very similar but work slightly different in subtle ways. 
 
 ```php
 $certificate->getDomain(); // returns "www.liquidweb.com"
 ```
+
+Returns the user input domain, or the primary domain name for the certificate. This dynamic style of results helps to resolve issues with CloudFlare SSLs.
+If the certificate's primary domain is not at all similar to the input domain then this method returns the input domain.
+
+```php
+$certificate->getCertificateDomain(); // returns "www.liquidweb.com"
+```
+
+Returns the primary domain name for the certificate; this will consistently and ONLY return the SSLs subject CN.
 
 ### Getting the certificate's signing algorithm
 
@@ -106,7 +118,11 @@ $certificate->expirationDate(); // returns an instance of Carbon
 
 ### Determining if the certificate is still valid
 
-Returns true if the current Date and time is between `validFromDate` and `expirationDate`.
+Returns true if the SSL is valid for the domain, trusted by default, and is not currently expired.
+
+An SSL is valid for the domain provided if the domain is the main subject, or a SAN.
+Trust status is determined based on how the SSL was downloaded; if it requires no cURL ssl verificaiton then it's untrused.
+Expiration status is found valid if current Date and time is between `validFromDate` and `expirationDate`.
 
 ```php
 $certificate->isValid(); // returns a boolean
