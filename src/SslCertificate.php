@@ -205,7 +205,7 @@ class SslCertificate
     {
         $certDomain = $this->getCertificateDomain();
         if (str_contains($certDomain, $this->inputDomain) === false) {
-          return $this->inputDomain;
+            return $this->inputDomain;
         }
         return $certDomain ?? '';
     }
