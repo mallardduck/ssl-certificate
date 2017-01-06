@@ -69,6 +69,7 @@ class Downloader
         }
 
         return [
+            'inputDomain' => $parsedUrl,
             'tested' => $testedUrl,
             'trusted' => $trusted,
             'dns-resolves-to' => $domainIp,

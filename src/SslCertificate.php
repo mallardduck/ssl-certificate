@@ -20,6 +20,9 @@ class SslCertificate
     protected $serial;
 
     /** @var string */
+    protected $inputDomain;
+
+    /** @var string */
     protected $testedDomain;
 
     /** @var array */
@@ -107,13 +110,14 @@ class SslCertificate
 
     public function __construct(array $downloadResults)
     {
-        $this->ip = $downloadResults['dns-resolves-to'];
-        $this->serial = new BigInteger($downloadResults['cert']['serialNumber']);
+        $this->inputDomain = $downloadResults['inputDomain'];
         $this->testedDomain = $downloadResults['tested'];
         $this->trusted = $downloadResults['trusted'];
+        $this->ip = $downloadResults['dns-resolves-to'];
         $this->certificateFields = $downloadResults['cert'];
         $this->certificateChains = self::parseCertChains($downloadResults['full_chain']);
         $this->connectionMeta = $downloadResults['connection'];
+        $this->serial = new BigInteger($downloadResults['cert']['serialNumber']);
 
         if (isset($downloadResults['cert']['extensions']['crlDistributionPoints'])) {
             $this->crlLinks = self::parseCrlLinks($downloadResults['cert']['extensions']['crlDistributionPoints']);
@@ -199,7 +203,16 @@ class SslCertificate
 
     public function getDomain(): string
     {
-        return $this->certificateFields['subject']['CN'] ?? '';
+        $certDomain = $this->getCertificateDomain();
+        if (str_contains($certDomain, $this->inputDomain) === false) {
+          return $this->inputDomain;
+        }
+        return $certDomain ?? '';
+    }
+
+    public function getCertificateDomain(): string
+    {
+        return $this->certificateFields['subject']['CN'];
     }
 
     public function getSignatureAlgorithm(): string
