@@ -11,7 +11,7 @@ trait TrackDomainTrait
         $this->errorDomain = $domain;
     }
 
-    private function getErrorDomain(string $domain)
+    public function getErrorDomain(string $domain)
     {
         return $this->errorDomain;
     }
