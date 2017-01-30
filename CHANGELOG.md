@@ -2,6 +2,9 @@
 
 All notable changes to `ssl-certificate` will be documented in this file
 
+## 2.3.6 - 2016-01-30
+- Fix bug discovered with verification logic.
+
 ## 2.3.1 - 2.3.5 - 2016-01-30
 - Track URL/Hostname in exceptions.
 - Technically this changes the API, but in a BC way; this is really being done

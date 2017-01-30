@@ -262,7 +262,7 @@ class SslCertificate
             return false;
         }
         // If a URL is provided verify the SSL applies to the domain
-        if ($this->appliesToUrl($url ?? $this->getDomain()) === false) {
+        if ($this->appliesToUrl($url ?? $this->inputDomain) === false) {
             return false;
         }
         // Check SerialNumber for CRL list
