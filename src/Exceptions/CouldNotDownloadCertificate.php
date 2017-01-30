@@ -7,13 +7,13 @@ use LiquidWeb\SslCertificate\Url;
 
 class CouldNotDownloadCertificate extends Exception
 {
-
     use TrackDomainTrait;
 
     public static function hostDoesNotExist(string $hostName): CouldNotDownloadCertificate
     {
         $exception = new static("The host named `{$hostName}` does not exist.");
         $exception->setErrorDomain($hostName);
+
         return $exception;
     }
 
@@ -21,6 +21,7 @@ class CouldNotDownloadCertificate extends Exception
     {
         $exception = new static("Could not find a certificate on  host named `{$hostName}`.");
         $exception->setErrorDomain($hostName);
+
         return $exception;
     }
 
@@ -31,6 +32,7 @@ class CouldNotDownloadCertificate extends Exception
         }
         $exception = new static("Server SSL handshake error – the certificate for `{$url->getTestURL()}` will not work.");
         $exception->setErrorDomain($url->getHostName());
+
         return $exception;
     }
 
@@ -38,6 +40,7 @@ class CouldNotDownloadCertificate extends Exception
     {
         $exception = new static("Connection timed out while testing `{$hostName}`.");
         $exception->setErrorDomain($hostName);
+
         return $exception;
     }
 
@@ -45,6 +48,7 @@ class CouldNotDownloadCertificate extends Exception
     {
         $exception = new static("Could not download certificate for host `{$hostName}` because {$errorMessage}");
         $exception->setErrorDomain($hostName);
+
         return $exception;
     }
 }

@@ -2,16 +2,17 @@
 
 namespace LiquidWeb\SslCertificate\Exceptions;
 
-trait TrackDomainTrait {
+trait TrackDomainTrait
+{
+    protected $errorDomain;
 
-  protected $errorDomain;
+    private function setErrorDomain(string $domain)
+    {
+        $this->errorDomain = $domain;
+    }
 
-  private function setErrorDomain(string $domain) {
-    $this->errorDomain = $domain;
-  }
-
-  private function getErrorDomain(string $domain) {
-     return $this->errorDomain;
-  }
-
+    private function getErrorDomain(string $domain)
+    {
+        return $this->errorDomain;
+    }
 }
