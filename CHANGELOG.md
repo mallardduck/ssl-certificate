@@ -2,6 +2,11 @@
 
 All notable changes to `ssl-certificate` will be documented in this file
 
+## 2.3.1 - 2016-01-30
+- Track URL/Hostname in exceptions.
+- Technically this changes the API, but in a BC way; this is really being done
+  to fix a bug in an application so I'm only doing a minor bump.
+
 ## 2.3.0 - 2016-01-06
 
 - Fixes issues caused by CloudFlare domains/SSLs
