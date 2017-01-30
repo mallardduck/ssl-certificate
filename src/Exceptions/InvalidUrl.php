@@ -6,27 +6,29 @@ use Exception;
 
 class InvalidUrl extends Exception
 {
+    use TrackDomainTrait;
 
-  use TrackDomainTrait;
+    public static function couldNotValidate(string $url): InvalidUrl
+    {
+        $exception = new static("String `{$url}` is not a valid url.");
+        $exception->setErrorDomain('google.com');
 
-  public static function couldNotValidate(string $url): InvalidUrl
-  {
-      $exception = new static("String `{$url}` is not a valid url.");
-      $exception->setErrorDomain('google.com');
-      return $exception;
-  }
+        return $exception;
+    }
 
-  public static function couldNotDetermineHost(string $url): InvalidUrl
-  {
-      $exception = new static("Could not determine host from url `{$url}`.");
-      $exception->setErrorDomain('google.com');
-      return $exception;
-  }
+    public static function couldNotDetermineHost(string $url): InvalidUrl
+    {
+        $exception = new static("Could not determine host from url `{$url}`.");
+        $exception->setErrorDomain('google.com');
 
-  public static function couldNotResolveDns(string $hostName): InvalidUrl
-  {
-      $exception = new static("The domain `{$hostName}` does not have a valid DNS record.");
-      $exception->setErrorDomain($hostName);
-      return $exception;
-  }
+        return $exception;
+    }
+
+    public static function couldNotResolveDns(string $hostName): InvalidUrl
+    {
+        $exception = new static("The domain `{$hostName}` does not have a valid DNS record.");
+        $exception->setErrorDomain($hostName);
+
+        return $exception;
+    }
 }
