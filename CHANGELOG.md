@@ -2,11 +2,12 @@
 
 All notable changes to `ssl-certificate` will be documented in this file
 
-## 2.3.1 & 2.3.3 - 2016-01-30
+## 2.3.1 - 2.3.4 - 2016-01-30
 - Track URL/Hostname in exceptions.
 - Technically this changes the API, but in a BC way; this is really being done
   to fix a bug in an application so I'm only doing a minor bump.
 - Use a class trait to add these domain tracking methods
+- This method should have been public
 
 ## 2.3.0 - 2016-01-06
 
