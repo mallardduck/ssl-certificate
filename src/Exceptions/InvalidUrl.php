@@ -11,7 +11,6 @@ class InvalidUrl extends Exception
     public static function couldNotValidate(string $url): InvalidUrl
     {
         $exception = new static("String `{$url}` is not a valid url.");
-        $exception->setErrorDomain('google.com');
 
         return $exception;
     }
@@ -19,7 +18,6 @@ class InvalidUrl extends Exception
     public static function couldNotDetermineHost(string $url): InvalidUrl
     {
         $exception = new static("Could not determine host from url `{$url}`.");
-        $exception->setErrorDomain('google.com');
 
         return $exception;
     }
