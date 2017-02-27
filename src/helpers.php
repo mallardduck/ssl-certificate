@@ -92,9 +92,9 @@ function length(string $value): int
 function str_contains(string $haystack, $needles): bool
 {
     foreach ((array) $needles as $needle) {
-      if ($needle != '' && mb_strpos($haystack, $needle) !== false) {
-          return true;
-      }
+        if ($needle != '' && mb_strpos($haystack, $needle) !== false) {
+            return true;
+        }
     }
 
     return false;
