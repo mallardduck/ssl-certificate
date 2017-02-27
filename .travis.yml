@@ -25,7 +25,6 @@ before_script:
 
 script:
   - vendor/bin/phpstan analyse -l4 src tests
-  - vendor/bin/phan --project-root-directory --progress-bar -o phan.out
   - phpunit --coverage-text --coverage-clover=coverage.clover
 
 after_script:
