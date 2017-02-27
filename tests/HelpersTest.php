@@ -51,6 +51,11 @@ class HelpersTest extends PHPUnit_Framework_TestCase
     public function it_can_determine_the_lenght_of_a_string()
     {
         $this->assertEquals(11, \LiquidWeb\SslCertificate\length('foo bar baz'));
+        $this->assertEquals(6, \LiquidWeb\SslCertificate\length('google'));
+        $this->assertEquals(9, \LiquidWeb\SslCertificate\length('123456789'));
+        $this->assertEquals(10, \LiquidWeb\SslCertificate\length('1234567890'));
+        $this->assertTrue(\LiquidWeb\SslCertificate\length('1234567890') === 10);
+        $this->assertFalse(\LiquidWeb\SslCertificate\length('123456789') === 42);
     }
 
     /** @test */

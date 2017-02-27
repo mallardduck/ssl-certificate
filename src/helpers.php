@@ -28,7 +28,7 @@ function isValidUrl($domain): bool
 function starts_with($haystack, $needles): bool
 {
     foreach ((array) $needles as $needle) {
-        if ($needle != '' && mb_strpos($haystack, $needle) === 0) {
+        if ($needle != '' && substr($haystack, 0, length($needle)) === (string) $needle) {
             return true;
         }
     }
@@ -92,9 +92,9 @@ function length(string $value): int
 function str_contains(string $haystack, $needles): bool
 {
     foreach ((array) $needles as $needle) {
-        if ($needle != '' && mb_strpos($haystack, $needle) !== false) {
-            return true;
-        }
+      if ($needle != '' && mb_strpos($haystack, $needle) !== false) {
+          return true;
+      }
     }
 
     return false;
