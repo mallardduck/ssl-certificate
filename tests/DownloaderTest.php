@@ -33,6 +33,27 @@ class DownloaderTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
+    public function it_can_track_test_domains()
+    {
+        $downloadResults = Downloader::downloadCertificateFromUrl('spatie.be:443', 10);
+        $this->assertTrue(is_array($downloadResults));
+        $this->assertSame('spatie.be:443', $downloadResults['inputDomain']);
+        $this->assertSame('spatie.be:443', $downloadResults['tested']);
+        $downloadResults = null;
+
+        $downloadResults = Downloader::downloadCertificateFromUrl('http://spatie.be/', 10);
+        $this->assertTrue(is_array($downloadResults));
+        $this->assertSame('http://spatie.be/', $downloadResults['inputDomain']);
+        $this->assertSame('spatie.be:443', $downloadResults['tested']);
+        $downloadResults = null;
+
+        $downloadResults = Downloader::downloadCertificateFromUrl('http://www.spatie.be/', 10);
+        $this->assertTrue(is_array($downloadResults));
+        $this->assertSame('http://www.spatie.be/', $downloadResults['inputDomain']);
+        $this->assertSame('www.spatie.be:443', $downloadResults['tested']);
+    }
+
+    /** @test */
     public function it_can_throw_ssl_errors_correctly()
     {
         $this->expectException(CouldNotDownloadCertificate::class);

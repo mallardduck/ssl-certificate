@@ -86,7 +86,7 @@ class Downloader
         $file = file_get_contents($parsedUrl->getValidatedURL(), false, $csrConfig->getContext());
         unset($csrConfig, $parsedUrl);
         $x509 = new X509();
-        $crl = $x509->loadCRL($file); // see ev2009a.crl
+        $crl = $x509->loadCRL($file);
         unset($x509, $file);
 
         return $crl;
