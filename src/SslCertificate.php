@@ -136,11 +136,6 @@ class SslCertificate
         return false;
     }
 
-    public function getTestedDomain(): string
-    {
-        return $this->testedDomain;
-    }
-
     public function getCertificateFields(): array
     {
         return $this->certificateFields;
@@ -200,7 +195,7 @@ class SslCertificate
     {
         return $this->certificateFields['issuer']['CN'];
     }
-
+    
     public function getDomain(): string
     {
         $certDomain = $this->getCertificateDomain();
@@ -211,14 +206,19 @@ class SslCertificate
         return $certDomain ?? '';
     }
 
+    public function getTestedDomain(): string
+    {
+        return $this->testedDomain;
+    }
+
+    public function getInputDomain(): string
+    {
+        return $this->inputDomain;
+    }
+
     public function getCertificateDomain(): string
     {
         return $this->certificateFields['subject']['CN'];
-    }
-
-    public function getSignatureAlgorithm(): string
-    {
-        return $this->certificateFields['signatureTypeSN'] ?? '';
     }
 
     public function getAdditionalDomains(): array
@@ -228,6 +228,11 @@ class SslCertificate
         return array_map(function (string $domain) {
             return str_replace('DNS:', '', $domain);
         }, $additionalDomains);
+    }
+
+    public function getSignatureAlgorithm(): string
+    {
+        return $this->certificateFields['signatureTypeSN'] ?? '';
     }
 
     public function getConnectionMeta(): array
@@ -261,7 +266,7 @@ class SslCertificate
         if (! Carbon::now()->between($this->validFromDate(), $this->expirationDate())) {
             return false;
         }
-        // If a URL is provided verify the SSL applies to the domain
+        // Verify the SSL applies to the domain; use $url if provided, other wise use input
         if ($this->appliesToUrl($url ?? $this->inputDomain) === false) {
             return false;
         }
@@ -289,7 +294,7 @@ class SslCertificate
         }
         $host = (new Url($url))->getHostName();
 
-        $certificateHosts = array_merge([$this->getDomain()], $this->getAdditionalDomains());
+        $certificateHosts = array_merge([$this->getCertificateDomain()], $this->getAdditionalDomains());
 
         foreach ($certificateHosts as $certificateHost) {
             if ($host === $certificateHost) {
