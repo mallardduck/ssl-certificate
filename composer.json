@@ -25,7 +25,6 @@
     },
     "require-dev": {
         "ext-ast": "*",
-        "etsy/phan": "dev-master",
         "phpstan/phpstan": "^0.4.2",
         "phpunit/phpunit": "5.7.*"
     },
