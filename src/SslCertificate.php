@@ -298,7 +298,7 @@ class SslCertificate
       //Try to parse the string
       try {
         $issuerUrl = new Url($url);
-      } catch (InvalidArgumentException $e) {
+      } catch (\Exception $e) {
         // if we hit this exception then the string is not likely a URL
         return false;
       }

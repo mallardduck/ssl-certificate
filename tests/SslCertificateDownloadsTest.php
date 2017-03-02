@@ -16,11 +16,21 @@ class SslCertificateDownloadsTest extends PHPUnit_Framework_TestCase
     }
 
     /** @test */
-    public function it_can_create_verify_host_domains()
+    public function it_can_verify_host_domains()
     {
         $downloadedCertificate = SslCertificate::createForHostName('google.com');
 
         $this->assertSame('*.google.com', $downloadedCertificate->getDomain());
         $this->assertSame(true, $downloadedCertificate->appliesToUrl('*.google.com'));
+    }
+
+    /** @test */
+    public function it_can_verify_nasty_ssls()
+    {
+        $downloadedCertificate = SslCertificate::createForHostName('edellroot.badssl.com');
+
+        $this->assertSame(false, $downloadedCertificate->isSelfSigned());
+        $this->assertSame(false, $downloadedCertificate->appliesToUrl('badssl.com'));
+        $this->assertSame('edellroot.badssl.com', $downloadedCertificate->getDomain());
     }
 }
