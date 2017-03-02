@@ -2,12 +2,13 @@
 
 All notable changes to `ssl-certificate` will be documented in this file
 
-## 2.4.0 - 2016-??-??
+## 2.4.0 - 2016-03-02
+- Expand Unit tests.
 - Remove etsy/phan for the time being; it's causing issues with automated tests.
 - Small refactor of certain helper functions.
-- Expand Unit tests.
 - Start fix for bug in SSL verifier application
 - Begin improving domain related methods
+- Add isSelfSigned method - returns a bool, or null when checks are unsure
 
 ## 2.3.6 - 2016-01-30
 - Fix bug discovered with verification logic.
