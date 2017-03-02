@@ -287,6 +287,30 @@ class SslCertificate
         return $this->isValid($url);
     }
 
+    public function isSelfSigned()
+    {
+      // Get the issuer data
+      $url = $this->getIssuer();
+      // make sure we don't include wildcard if it's there...
+      if (starts_with($url, '*.') === true) {
+          $url = substr($url, 2);
+      }
+      //Try to parse the string
+      try {
+        $issuerUrl = new Url($url);
+      } catch (\Exception $e) {
+        // if we hit this exception then the string is not likely a URL
+        return false;
+      }
+      // If it is a domain, run appliesToUrl($this->getIssuer())
+      if ($this->appliesToUrl($url) === true) {
+          return true;
+      }
+      
+      // default to return null; this means maybe
+      return null;
+    }
+
     public function appliesToUrl(string $url): bool
     {
         if (starts_with($url, '*.') === true) {
