@@ -313,7 +313,7 @@ class SslCertificate
             return false;
         }
       // If it is a domain, run appliesToUrl
-        if ($this->appliesToUrl($issuerUrl) === true) {
+        if ($this->appliesToUrl((string) $issuerUrl) === true) {
             return true;
         }
 
