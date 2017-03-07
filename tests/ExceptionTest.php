@@ -20,8 +20,7 @@ class ExceptionTest extends PHPUnit_Framework_TestCase
     /** @test */
     public function it_can_use_the_handler_to_throw_exceptions()
     {
-      $this->expectException(CouldNotDownloadCertificate::class);
-      $cert = Downloader::downloadCertificateFromUrl('rc4.badssl.com', 5);
+        $this->expectException(CouldNotDownloadCertificate::class);
+        $cert = Downloader::downloadCertificateFromUrl('rc4.badssl.com', 5);
     }
-
 }
