@@ -195,7 +195,7 @@ class SslCertificate
     {
         return $this->certificateFields['issuer']['CN'];
     }
-    
+
     public function getDomain(): string
     {
         $certDomain = $this->getCertificateDomain();
@@ -280,11 +280,20 @@ class SslCertificate
 
     public function isValidUntil(Carbon $carbon, string $url = null): bool
     {
-        if ($this->expirationDate()->gt($carbon)) {
+        if ($this->isValidDate($carbon) === false) {
             return false;
         }
 
         return $this->isValid($url);
+    }
+
+    public function isValidDate(Carbon $carbon): bool
+    {
+        if ($carbon->between($this->validFromDate(), $this->expirationDate()) === false) {
+            return false;
+        }
+
+        return true;
     }
 
     public function isSelfSigned()
@@ -306,7 +315,7 @@ class SslCertificate
         if ($this->appliesToUrl($url) === true) {
             return true;
         }
-      
+
       // default to return null; this means maybe
         return null;
     }
