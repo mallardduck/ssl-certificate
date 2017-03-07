@@ -2,6 +2,10 @@
 
 All notable changes to `ssl-certificate` will be documented in this file
 
+## 2.4.1 - 2016-03-06
+- Add new isValidDate method to compare a date to the validity window
+- Use new method to fix a bug reported in the isValidUntil method
+
 ## 2.4.0 - 2016-03-02
 - Expand Unit tests.
 - Remove etsy/phan for the time being; it's causing issues with automated tests.

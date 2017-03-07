@@ -64,7 +64,7 @@ $certificate->getIssuer(); // returns "GlobalSign Extended Validation CA - SHA25
 ### Getting the domain name
 
 Getting a domain can be done one of two ways; you can either use `getDomain` or `getCertificateDomain`.
-They are very similar but work slightly different in subtle ways. 
+They are very similar but work slightly different in subtle ways.
 
 ```php
 $certificate->getDomain(); // returns "www.liquidweb.com"
@@ -136,6 +136,14 @@ $certificate->isValid('spatie.be'); // returns false;
 ```
 
 ### Determining if the certificate is still valid until a given date
+
+Returns true if a given date is within the certificate's expiration window. The SSL may still be invlaid for other reasons, this simply checks the date agains the `validFromDate` and `expirationDate` dates of the SSL.
+
+```php
+$certificate->isValidDate(Carbon::create('2017', '03', '30', '12', '00', '00', 'utc')); // returns a boolean
+```
+
+### Determining if the certificate is still valid until a given date and ensure it's a valid SSL
 
 Returns true if the certificate is valid and if the `expirationDate` is before the given date.
 
