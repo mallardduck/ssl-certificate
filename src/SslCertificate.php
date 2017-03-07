@@ -296,7 +296,7 @@ class SslCertificate
         return true;
     }
 
-    public function isSelfSigned()
+    public function isSelfSigned(): bool
     {
         // Get the issuer data
         $url = $this->getIssuer();
@@ -309,14 +309,15 @@ class SslCertificate
             $issuerUrl = new Url($url);
         } catch (\Exception $e) {
             // if we hit this exception then the string is not likely a URL
+            // If it's not a URL and is valid we can assume it's not self signed
             return false;
         }
-      // If it is a domain, run appliesToUrl($this->getIssuer())
-        if ($this->appliesToUrl($url) === true) {
+      // If it is a domain, run appliesToUrl
+        if ($this->appliesToUrl($issuerUrl) === true) {
             return true;
         }
 
-      // default to return null; this means maybe
+        return false;
     }
 
     public function appliesToUrl(string $url): bool
