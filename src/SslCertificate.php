@@ -34,14 +34,14 @@ class SslCertificate
     /** @var array */
     protected $connectionMeta = [];
 
-    /** @var SslRevocationList */
-    protected $crl;
-
     /** @var array */
     protected $crlLinks = [];
 
+    /** @var SslRevocationList */
+    protected $crl = null;
+
     /** @var Carbon */
-    protected $revokedTime;
+    protected $revokedTime = null;
 
     public static function createForHostName(string $url, int $timeout = 30): SslCertificate
     {
@@ -121,10 +121,19 @@ class SslCertificate
 
         if (isset($downloadResults['cert']['extensions']['crlDistributionPoints'])) {
             $this->crlLinks = self::parseCrlLinks($downloadResults['cert']['extensions']['crlDistributionPoints']);
-            $this->crl = SslRevocationList::createFromUrl($this->getCrlLinks()[0]);
-            $this->revoked = $this->isClrRevoked();
-            $this->revokedTime = $this->getRevokedDate();
         }
+    }
+
+    public function withSslCrlCheck(): SslCertificate
+    {
+        $links = $this->getCrlLinks();
+        if (is_null($links) === true || empty($links) === true) {
+            return $this;
+        }
+        $this->crl = SslRevocationList::createFromUrl($links[0]);
+        $this->revoked = $this->isClrRevoked();
+        $this->revokedTime = $this->getRevokedDate();
+        return $this;
     }
 
     public function hasSslChain(): bool
