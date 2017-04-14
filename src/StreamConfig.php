@@ -15,9 +15,10 @@ class StreamConfig
     {
         $streamContext = stream_context_create(
             [
-            'ssl' => [
-                'capture_peer_cert' => true,
-                'capture_peer_cert_chain' => true,
+                'ssl' => [
+                    'capture_peer_cert' => true,
+                    'capture_peer_cert_chain' => true,
+                    'disable_compression' => true,
                 ],
             ]
         );
@@ -29,12 +30,13 @@ class StreamConfig
     {
         $streamContext = stream_context_create(
             [
-            'ssl' => [
-                'allow_self_signed' => true,
-                'verify_peer' => false,
-                'verify_peer_name' => false,
-                'capture_peer_cert' => true,
-                'capture_peer_cert_chain' => true,
+                'ssl' => [
+                    'allow_self_signed' => true,
+                    'verify_peer' => false,
+                    'verify_peer_name' => false,
+                    'capture_peer_cert' => true,
+                    'capture_peer_cert_chain' => true,
+                    'disable_compression' => true,
                 ],
             ]
         );
